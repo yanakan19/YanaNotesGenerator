@@ -1,0 +1,66 @@
+% week_template.tex — skeleton for every week's notes.
+% Copy into the week folder as MODULE_WeekNN_Notes.tex and fill the marked slots.
+% Compile FROM THE WEEK FOLDER with the shared style on the search path:
+%   $env:TEXINPUTS = ".;C:\Users\mryx1\repos\uni-notes\templates;"
+%   pdflatex -interaction=nonstopmode MODULE_WeekNN_Notes.tex   (run twice)
+\documentclass[10pt,a4paper]{article}
+\usepackage{uninotes}
+
+% Module code, full module name, week number — drives the header and title.
+\notesmodule{MODULE}{Full Module Name}{0}
+
+\begin{document}
+
+\notestitle
+
+% Contents page: must fit on one page (uninotes.sty keeps it compact).
+\tableofcontents
+\newpage
+
+% ============================ LECTURE CONTENT ============================
+% Sections/subsections in lecture delivery order.
+% Every displayed equation is followed by a varlist block (first use only):
+%
+%   \begin{equation} e_0 = Blv \end{equation}
+%   \begin{varlist}
+%     \vitem{e_0}{output voltage}{V}
+%     \vitem{B}{magnetic flux density}{T}
+%     \vitem{l}{conductor length}{m}
+%     \vitem{v}{velocity}{m\,s^{-1}}
+%   \end{varlist}
+%
+% Boxes (titles ALWAYS in braces):
+%   \begin{defbox}{Definition: ...} ... \end{defbox}
+%   \begin{keybox}{Key Result: ...} ... \end{keybox}
+%   \begin{warningbox}{Pitfall: ...} ... \end{warningbox}
+%
+% Cropped slide figures: \notesfig{fig01_name.png}{0.6}{Caption text}
+
+\section{Topic One}
+
+% ============================== KEY SUMMARY ==============================
+\section{Key Summary}
+% Compact recap of the week: key equations, definitions, takeaways.
+
+% ========================= WORKED EXAMPLES Q\&A ==========================
+\section{Worked Examples Q\&A}
+% EVERY worked example from the lecture slides AND the worksheets/solutions,
+% in Q&A format mirroring the official solution method:
+%
+%   \begin{examplebox}{Worked Example: vibrometer amplitude ratio}
+%     \question{...problem exactly as given...}
+%     \wstep{1}{Explain in plain English what is done and why}
+%     \begin{align} ... \end{align}
+%     \wstep{2}{...}
+%     \result{...value and what it means physically...}
+%   \end{examplebox}
+
+% ==================== REVISION QUESTIONS AND ANSWERS =====================
+\section{Revision Questions and Answers}
+% Every question from the revision slides, none skipped:
+%   \begin{revisionbox}{Question 1: ...}
+%     \question{...}
+%     ...full tutor style answer; numerical problems use \wstep/\result...
+%   \end{revisionbox}
+
+\end{document}

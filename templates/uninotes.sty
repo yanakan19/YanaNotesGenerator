@@ -1,0 +1,154 @@
+% uninotes.sty — single source of formatting truth for ALL university notes.
+% Every week's notes must load this package and NOTHING style-related locally.
+% A change here restyles every week on recompile, keeping all documents uniform.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{uninotes}[2026/07/07 v1.0 Uniform university notes style]
+
+% ---------------------------------------------------------------- geometry
+% Tight margins for booklet printing, but with enough breathing room to read.
+\RequirePackage[a4paper,margin=1.6cm,headheight=14pt,headsep=0.35cm,footskip=0.9cm]{geometry}
+
+% ---------------------------------------------------------------- base
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+\RequirePackage{microtype}
+\RequirePackage{tocloft} % before parskip: parskip redefines \@starttoc and tocloft bails if loaded after
+\RequirePackage{parskip}
+\RequirePackage{amsmath,amssymb}
+\RequirePackage{graphicx}
+\RequirePackage{booktabs,array,tabularx}
+\RequirePackage{enumitem}
+\setlist{nosep,leftmargin=1.4em,topsep=2pt}
+\RequirePackage{xcolor}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{titlesec}
+\RequirePackage{fancyhdr}
+\RequirePackage{caption}
+\captionsetup{font=small,skip=3pt}
+
+% -------------------------------------------- copy-paste / open-book safety
+% Never break words with hyphens at line ends: text copied from the printed
+% or on-screen notes must paste as clean unhyphenated prose.
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\tolerance=2000
+\emergencystretch=3em
+
+% ---------------------------------------------------------------- colours
+\definecolor{notesblue}{RGB}{0,74,153}     % sections, key results
+\definecolor{defgreen}{RGB}{22,122,63}     % definitions
+\definecolor{exampleviolet}{RGB}{94,53,177}% worked examples
+\definecolor{warnamber}{RGB}{191,121,0}    % warnings / pitfalls
+\definecolor{revteal}{RGB}{0,121,121}      % revision Q&A
+
+\RequirePackage[colorlinks=true,linkcolor=notesblue,urlcolor=notesblue]{hyperref}
+
+% -------------------------------------------------------- module identity
+% Each week's document sets these three values once, right after loading the
+% package. They drive the header and the title block.
+%   \notesmodule{ES3E8}{Instrumentation and Measurement}{5}
+\newcommand{\unimodulecode}{MODULE}
+\newcommand{\unimodulename}{Module Name}
+\newcommand{\uniweeknumber}{0}
+\newcommand{\notesmodule}[3]{%
+  \renewcommand{\unimodulecode}{#1}%
+  \renewcommand{\unimodulename}{#2}%
+  \renewcommand{\uniweeknumber}{#3}%
+}
+
+% ------------------------------------------------------------ header/footer
+% Header text is fixed by convention: "MODULENUMBER: MODULE NAME - WEEK NUMBER Notes"
+% Page number centred in the footer.
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\small\itshape \unimodulecode: \unimodulename\ - Week \uniweeknumber\ Notes}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ---------------------------------------------------------------- headings
+\titleformat{\section}{\Large\bfseries\color{notesblue}}{\thesection}{0.6em}{}
+\titlespacing*{\section}{0pt}{9pt}{3pt}
+\titleformat{\subsection}{\large\bfseries\color{notesblue!85!black}}{\thesubsection}{0.6em}{}
+\titlespacing*{\subsection}{0pt}{7pt}{2pt}
+\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{0.6em}{}
+\titlespacing*{\subsubsection}{0pt}{5pt}{2pt}
+
+% -------------------------------------------------------- compact contents
+% The table of contents must always fit on one page.
+\setcounter{tocdepth}{2}
+\renewcommand{\cfttoctitlefont}{\Large\bfseries\color{notesblue}}
+\renewcommand{\cftsecfont}{\small\bfseries}
+\renewcommand{\cftsecpagefont}{\small\bfseries}
+\renewcommand{\cftsubsecfont}{\footnotesize}
+\renewcommand{\cftsubsecpagefont}{\footnotesize}
+\setlength{\cftbeforesecskip}{2.5pt}
+\setlength{\cftbeforesubsecskip}{0.5pt}
+\setlength{\cftbeforetoctitleskip}{0pt}
+\setlength{\cftaftertoctitleskip}{6pt}
+
+% ------------------------------------------------------------- title block
+\newcommand{\notestitle}{%
+  \begin{center}
+    {\LARGE\bfseries\color{notesblue} \unimodulecode\ - Week \uniweeknumber\ Notes}\\[2pt]
+    {\large \unimodulename}
+  \end{center}
+  \vspace{2pt}\hrule\vspace{6pt}%
+}
+
+% ------------------------------------------------- equation variable lists
+% Every displayed formula is followed by a varlist naming each symbol in the
+% fixed format  Term: FullName (UNITS)  one per line, centred, first use only.
+%   \begin{varlist}
+%     \vitem{v}{velocity}{m\,s^{-1}}
+%     \vitem{B}{magnetic flux density}{T}
+%   \end{varlist}
+\newenvironment{varlist}
+  {\par\nopagebreak\vspace{-4pt}\begin{center}\small\begin{tabular}{@{}l@{}}}
+  {\end{tabular}\end{center}\vspace{1pt}}
+\newcommand{\vitem}[3]{$#1$: #2 ($\mathrm{#3}$)\\}
+% Dimensionless variant: \vitemnd{\zeta}{damping ratio}
+\newcommand{\vitemnd}[2]{$#1$: #2 (dimensionless)\\}
+
+% ------------------------------------------------------------------- boxes
+% ALWAYS pass titles braced: \begin{examplebox}{Worked Example: RTD bridge}
+% The mandatory argument is inserted as title={...} so commas in titles can
+% never be parsed as tcolorbox keys (a past compile failure).
+\newtcolorbox{defbox}[1]{enhanced,breakable,
+  colback=defgreen!5,colframe=defgreen,title={#1},fonttitle=\bfseries\small,
+  boxrule=0.7pt,arc=1.5pt,left=5pt,right=5pt,top=3pt,bottom=3pt,
+  before skip=6pt,after skip=6pt}
+\newtcolorbox{keybox}[1]{enhanced,breakable,
+  colback=notesblue!5,colframe=notesblue,title={#1},fonttitle=\bfseries\small,
+  boxrule=0.7pt,arc=1.5pt,left=5pt,right=5pt,top=3pt,bottom=3pt,
+  before skip=6pt,after skip=6pt}
+\newtcolorbox{examplebox}[1]{enhanced,breakable,
+  colback=exampleviolet!5,colframe=exampleviolet,title={#1},fonttitle=\bfseries\small,
+  boxrule=0.7pt,arc=1.5pt,left=5pt,right=5pt,top=3pt,bottom=3pt,
+  before skip=6pt,after skip=6pt}
+\newtcolorbox{warningbox}[1]{enhanced,breakable,
+  colback=warnamber!6,colframe=warnamber,title={#1},fonttitle=\bfseries\small,
+  boxrule=0.7pt,arc=1.5pt,left=5pt,right=5pt,top=3pt,bottom=3pt,
+  before skip=6pt,after skip=6pt}
+\newtcolorbox{revisionbox}[1]{enhanced,breakable,
+  colback=revteal!5,colframe=revteal,title={#1},fonttitle=\bfseries\small,
+  boxrule=0.7pt,arc=1.5pt,left=5pt,right=5pt,top=3pt,bottom=3pt,
+  before skip=6pt,after skip=6pt}
+
+% --------------------------------------------------- worked example helpers
+% Q&A layout used by every worked example and revision answer:
+%   \question{...}   the problem exactly as given
+%   \wstep{1}{Resolve forces on the seismic mass} then the maths
+%   \result{...}     final result and its physical meaning
+\newcommand{\question}[1]{\textbf{Question.} #1\par\smallskip}
+\newcommand{\wstep}[2]{\par\textbf{Step #1:} #2\par}
+\newcommand{\result}[1]{\par\smallskip\textbf{Result.} #1\par}
+
+% ------------------------------------------------------------------ figures
+% Cropped figures from original slides live in the week's figures/ folder:
+%   \notesfig{fig03_rtd_bridge.png}{0.55}{Three wire RTD bridge from the slides}
+\newcommand{\notesfig}[3]{%
+  \begin{center}
+    \includegraphics[width=#2\linewidth]{figures/#1}\\[1pt]
+    {\small\itshape #3}
+  \end{center}}
