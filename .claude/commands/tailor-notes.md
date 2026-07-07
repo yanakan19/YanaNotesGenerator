@@ -110,7 +110,7 @@ Locate the week's existing notes. Extract the new worksheet + solutions via the 
 
 ## CAPABILITY D — NEW MODULE
 
-Ask once for module code + full module name (and optionally the number of teaching weeks, default 10). Create `<CODE>/module.md` recording them plus a `Week NN/sources/` folder per week. Confirm the layout in five lines or fewer.
+Ask once for module code + full module name (and optionally the number of teaching weeks, default 10) unless both were given. Create `<CODE>/module.md` from `templates/module_template.md` plus a `Week NN/sources/` folder per week. Works for ANY module; nothing in this command is specific to one. Confirm the layout in five lines or fewer.
 
 ## CAPABILITY E — SYNC
 
