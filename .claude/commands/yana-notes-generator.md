@@ -1,5 +1,7 @@
 ---
-description: Yanakan's university notes engine. Routes to one of five capabilities; generate a week's uniform LaTeX notes from uploaded module resources (page by page vision extraction with checkpointing, cropped diagrams, master markdown, compiled PDF); tutor mode answering questions from the master markdown only; integrate a worksheet and its solutions; scaffold a new module; sync the repo to GitHub. Token lean; every source PDF is vision read exactly once, ever.
+name: yana-notes-generator
+description: Yanakan's university notes engine. Turns a folder of uploaded module resources (lecture slides, worksheets, solutions, revision decks) into compact, complete, uniformly formatted LaTeX study notes, page by page vision extraction with checkpointing, cropped diagrams, a master markdown, and a compiled PDF. Routes to five capabilities, GENERATE a week, TUTOR from the notes, add a WORKSHEET, scaffold a NEW MODULE, or SYNC to GitHub. Token lean; every source PDF is vision read exactly once, ever.
+argument-hint: [module] [Week NN]  ·  or a question for tutor mode  ·  or "set up module CODE Name"
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion
 model: Claude Sonnet (extended thinking / thinking mode)
 ---
@@ -22,7 +24,7 @@ $ARGUMENTS
 
 ## LAYOUT AND SOURCES (token discipline — read the minimum)
 
-- **Repo root:** `C:\Users\mryx1\repos\uni-notes`. Each module is a top level folder (e.g. `ES3E8/`) containing `module.md` (module code, full name, week map) and week folders (`Week 05/`). Resolve the module from the current working directory if inside one, otherwise from the user's words, otherwise ask once.
+- **Repo root:** `C:\Users\mryx1\repos\yana-notes-generator`. Each module is a top level folder (e.g. `ES3E8/`) containing `module.md` (module code, full name, week map) and week folders (`Week 05/`). Resolve the module from the current working directory if inside one, otherwise from the user's words, otherwise ask once.
 - **Week folder layout:** `sources/` (user uploads, NEVER modified or renamed), `extraction/` (one markdown per source file, the vision checkpoint cache), `figures/` (cropped PNGs), `pages-cache/` (rendered page PNGs, gitignored), plus `MODULE_WeekNN_Notes.md/.tex/.pdf` outputs.
 - **Generated vs source:** anything inside `extraction/`, `figures/`, `pages-cache/`, or matching `*_Notes.*` is OUTPUT. Everything in `sources/` (and any loose PDF/pptx/docx dropped in the week folder by the user) is SOURCE. Never treat outputs as source material.
 - **The extraction cache is authoritative.** If `extraction/<file>.md` ends with the completion marker, that source is done FOREVER; never re-render or re-read its pages. Tutor mode reads ONLY master markdown files, never PDFs or images.
@@ -69,7 +71,7 @@ $ARGUMENTS
 
 **A2. Render.** For each source PDF not yet extracted:
 ```powershell
-& "C:\Users\mryx1\repos\uni-notes\scripts\render_pages.ps1" -Pdf "<week>\sources\<file>.pdf" -OutDir "<week>\pages-cache\<file>"
+& "C:\Users\mryx1\repos\yana-notes-generator\scripts\render_pages.ps1" -Pdf "<week>\sources\<file>.pdf" -OutDir "<week>\pages-cache\<file>"
 ```
 (150 DPI. Non PDF sources: read docx/pptx via their skills instead.)
 
@@ -86,7 +88,7 @@ $ARGUMENTS
 **A6. LaTeX and compile.** Instantiate `templates/week_template.tex` as `MODULE_WeekNN_Notes.tex` in the week folder, set `\notesmodule{CODE}{Full Name}{N}` from `module.md`, and transform the master markdown into LaTeX using the template's environments. Compile FROM the week folder, twice:
 ```powershell
 Set-Location "<week folder>"
-$env:TEXINPUTS = ".;C:\Users\mryx1\repos\uni-notes\templates;"
+$env:TEXINPUTS = ".;C:\Users\mryx1\repos\yana-notes-generator\templates;"
 pdflatex -interaction=nonstopmode MODULE_WeekNN_Notes.tex
 ```
 Fix any errors (check the .log), rerun until clean. Confirm the ToC fits on one page (if not, trim ToC depth to sections only via `\setcounter{tocdepth}{1}` in the .tex). Report final page count and any warnings.
@@ -99,9 +101,9 @@ Select-String -Path "<file>" -Pattern '–|—| - '
 
 **A8. Commit and push.**
 ```powershell
-git -C "C:\Users\mryx1\repos\uni-notes" add -A
-git -C "C:\Users\mryx1\repos\uni-notes" commit -m "MODULE Week NN notes"
-git -C "C:\Users\mryx1\repos\uni-notes" push
+git -C "C:\Users\mryx1\repos\yana-notes-generator" add -A
+git -C "C:\Users\mryx1\repos\yana-notes-generator" commit -m "MODULE Week NN notes"
+git -C "C:\Users\mryx1\repos\yana-notes-generator" push
 ```
 (If push fails because no remote/auth, say so and continue; notes are still saved locally.)
 

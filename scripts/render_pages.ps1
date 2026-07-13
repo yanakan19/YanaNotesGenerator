@@ -1,4 +1,4 @@
-# render_pages.ps1 - pdftoppm wrapper for the /tailor-notes pipeline.
+# render_pages.ps1 - pdftoppm wrapper for the /yana-notes-generator pipeline.
 #
 # Full render (vision extraction input, 150 DPI keeps image tokens low):
 #   .\render_pages.ps1 -Pdf "sources\Part1.pdf" -OutDir "pages-cache\Part1"

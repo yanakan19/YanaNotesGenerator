@@ -1,4 +1,4 @@
-# Model recommendation for /tailor-notes
+# Model recommendation for /yana-notes-generator
 
 **Run this command on a Claude Sonnet model with extended thinking (thinking mode) enabled.**
 
@@ -20,6 +20,6 @@ Opus is not wrong here, just overkill for the money. Reserve Opus for genuinely 
 
 ## Practical setup
 
-- In Cowork or Claude Code, select a Sonnet model and turn thinking on before running `/tailor-notes`.
+- In Cowork or Claude Code, select a Sonnet model and turn thinking on before running `/yana-notes-generator`.
 - If a specific step needs deeper reasoning (a messy derivation in a revision answer), you can switch to Opus for that one question in tutor mode, then switch back.
 - Everything else in the workflow (the LaTeX style, the repo layout, the GitHub sync) is model independent.
