@@ -1,0 +1,242 @@
+% ES386 Week 6 Notes. Built on templates/week_template.tex with uninotes.sty.
+% Compile from this folder with:
+%   $env:TEXINPUTS = ".;C:\Users\mryx1\repos\uni-notes\templates;"
+%   pdflatex -interaction=nonstopmode ES386_Week06_Notes.tex   (run twice)
+\documentclass[10pt,a4paper]{article}
+\usepackage{uninotes}
+\notesmodule{ES386}{Dynamics of Vibrating Systems}{6}
+
+\begin{document}
+
+\notestitle
+
+\tableofcontents
+\newpage
+
+% ============================ LECTURE CONTENT ============================
+\section{Introduction: Modes and Modal Analysis}
+For any object, each \textbf{natural frequency} together with its corresponding vibrational shape (its \textbf{eigenvector}) defines one \textbf{normal mode}, usually just called a \textbf{mode}.
+
+\begin{defbox}{Definition: a mode is an inherent property}
+Modes are inherent physical properties, set by the mass, damping and stiffness and by the boundary conditions. They are independent of the initial conditions. The initial conditions only decide which modes are excited and with what amplitude and phase; every mode is always present, even when its amplitude is negligible.
+\end{defbox}
+
+Modal analysis matters because a structure driven near one of its natural frequencies can deform hugely under a tiny force, which can destroy it. The Tacoma Narrows bridge failed in November 1940 because the twisting mode at a separate natural frequency was missed. The Ferrybridge cooling towers failed in 1965 because grouping modes were missed. Aeroplane wings must be checked for flutter before flight. The goal of modal analysis is to find the natural frequencies and mode shapes, then predict the response to forcing.
+
+\section{Equation of Motion for a Multiple DoF System}
+A lumped undamped system with $n$ degrees of freedom has the matrix equation of motion
+\begin{equation}
+  M\ddot{\mathbf{x}} + K\mathbf{x} = \mathbf{0}
+\end{equation}
+\begin{varlist}
+  \vitem{M}{mass matrix}{kg}
+  \vitem{K}{stiffness matrix}{N\,m^{-1}}
+  \vitem{\mathbf{x}}{displacement vector}{m}
+\end{varlist}
+
+\begin{keybox}{Key Result: heuristic rules for the matrices}
+For a chain of masses and springs: the diagonal $K_{ii}$ is the sum of the stiffnesses of all springs connected to mass $i$; the off diagonal $K_{ij}$ is the negative of the stiffness directly joining masses $i$ and $j$ (equivalent stiffness if several). The same rules build the damping matrix $C$. For a system with no dynamic coupling and equal masses, $M = mI$.
+\end{keybox}
+
+\section{Free \texorpdfstring{$n$}{n} DoF Vibration: The Eigenvalue Problem}
+Assume the trial solution $x_i = A_i\cos(\omega t + \varphi)$, so $\ddot{x}_i = -\omega^2 A_i\cos(\omega t + \varphi)$. Substituting into the equation of motion and writing $\lambda = \omega^2$ gives
+\begin{equation}
+  (-\omega^2 M + K)\mathbf{x} = \mathbf{0} \quad\Rightarrow\quad (M^{-1}K - \lambda I)\mathbf{x} = \mathbf{0}
+\end{equation}
+\begin{varlist}
+  \vitem{\lambda}{eigenvalue, equal to $\omega^2$}{s^{-2}}
+  \vitem{\omega}{natural angular frequency}{rad\,s^{-1}}
+\end{varlist}
+
+This is a \textbf{standard eigenvalue problem} with $A = M^{-1}K$. An $n$ by $n$ diagonalisable $A$ has $n$ eigenvalue eigenvector pairs $\{\lambda_i = \omega_i^2, \mathbf{v}_i\}$, the normal modes. The general free response is their superposition:
+\begin{equation}
+  \mathbf{x}(t) = \sum_{i=1}^{n} A_i\mathbf{v}_i\cos(\omega_i t + \phi_i)
+\end{equation}
+The eigenvalue sets the mode frequency; the eigenvector sets the mode shape.
+
+\subsection{Coupling types}
+\textbf{Static coupling} means $K$ is not diagonal (masses joined by springs). \textbf{Dynamic coupling} means $M$ is not diagonal (for example a trolley carrying a pendulum). Three equivalent forms of the eigenproblem exist: $(M^{-1}K - \lambda I)X = 0$ with $\lambda = \omega^2$, and $(\mu I - D)X = 0$ with $\mu = 1/\omega^2$ and $D = K^{-1}M$.
+
+\section{Physical Intuitions and Mode Shapes}
+\begin{itemize}
+  \item Number of modes equals the number of degrees of freedom.
+  \item A finite number of degrees of freedom gives a finite number of stable patterns, though many transient motions are possible.
+  \item A stable motion needs every inertia to share one oscillation frequency, so they move in phase or in antiphase.
+  \item More nodes need more energy, so higher modes have higher frequency. With $n$ modes there are at most $n-1$ nodes, at most one node between adjacent inertias.
+  \item If the system is linear these patterns superpose. Natural frequencies and mode shapes depend only on the stiffness and inertia configuration, not on the initial conditions.
+\end{itemize}
+
+For a three mass three spring chain with unit $m$ and $k$ the solver gives eigenvalues $0.5858, 2.0000, 3.4142$, so $\omega = 0.77, 1.41, 1.85$ rad/s. Mode 1 has all masses on the same side with no interior node; mode 2 is antisymmetric with one central node; mode 3 alternates with two nodes.
+
+\notesfig{fig08_three_dof_mode_shapes.png}{0.5}{Mode shapes of the three mass chain, modes 1 to 3 top to bottom, cropped from the Unit 7 slides}
+
+\section{The Limitation of the Standard Approach}
+The standard approach works beautifully when the system is symmetric (equal masses and stiffnesses). It fails as soon as the masses differ. With $m_1 = 1, m_2 = 2, m_3 = 3$ and unit $k$,
+\begin{equation}
+  A = M^{-1}K = \begin{bmatrix} 2 & -1 & 0 \\ -\tfrac{1}{2} & 1 & -\tfrac{1}{2} \\ 0 & -\tfrac{1}{3} & \tfrac{2}{3} \end{bmatrix} \neq A^{T}
+\end{equation}
+
+\begin{warningbox}{Pitfall: an asymmetric A breaks the method}
+$A = M^{-1}K$ is not symmetric even when $M$ and $K$ both are, so its eigenvalues need not be real and the standard eigenvalue method fails. The fix is to change coordinates so the single matrix in the equation of motion is symmetric.
+\end{warningbox}
+
+\section{Generalised Eigenvalue Problem}
+The equation of motion can instead be solved directly as the \textbf{generalised eigenvalue problem}
+\begin{equation}
+  (-\omega^2 M + K)\mathbf{x} = \mathbf{0}
+\end{equation}
+solvable by hand or with the MATLAB call \texttt{eig(K, M)}. This keeps the symmetry of $M$ and $K$, but a single symmetric matrix would be neater still.
+
+\begin{keybox}{Key Result: symmetric matrix properties}
+Eigenvalues of a triangular or diagonal matrix are its diagonal entries. $\lambda = 0$ is an eigenvalue of a singular matrix. $B$ and $B^{T}$ share eigenvalues. A real symmetric matrix has real eigenvalues and orthogonal eigenvectors (for distinct eigenvalues). Positive definiteness $\mathbf{v}^{T}B\mathbf{v} > 0$ is equivalent to positive eigenvalues, which is assumed here because natural frequencies are roots of eigenvalues.
+\end{keybox}
+
+\section{Mass Normalised Coordinates}
+Since $M$ is diagonal its matrix square root is $M^{1/2} = \mathrm{diag}(\sqrt{m_i})$ with inverse $M^{-1/2} = \mathrm{diag}(1/\sqrt{m_i})$. Define \textbf{mass normalised coordinates}
+\begin{equation}
+  \mathbf{q} := M^{1/2}\mathbf{x} \iff \mathbf{x} = M^{-1/2}\mathbf{q}
+\end{equation}
+Substituting reduces the equation of motion to
+\begin{equation}
+  \ddot{\mathbf{q}} + \widetilde{K}\mathbf{q} = \mathbf{0}, \qquad \widetilde{K} := M^{-1/2}K M^{-1/2}
+\end{equation}
+\begin{varlist}
+  \vitem{\mathbf{q}}{mass normalised coordinate vector}{kg^{1/2}\,m}
+  \vitem{\widetilde{K}}{mass normalised stiffness matrix}{s^{-2}}
+\end{varlist}
+$\widetilde{K}$ is symmetric for all symmetric $M$ and $K$, so the equation of motion is now written with a single symmetric matrix.
+
+\section{Normal Coordinates and the Modal Matrix}
+$\widetilde{K}$ is symmetric but its components are still coupled. Let $P$ be the matrix of eigenvectors of $\widetilde{K}$ and transform to \textbf{normal coordinates}
+\begin{equation}
+  \mathbf{r} := P^{T}\mathbf{q} \iff \mathbf{q} = P\mathbf{r}
+\end{equation}
+Substituting gives $\ddot{\mathbf{r}} + \Lambda\mathbf{r} = \mathbf{0}$ with $\Lambda = \mathrm{diag}(\lambda_i)$, so
+\begin{equation}
+  \ddot{r}_i + \omega_i^2 r_i = 0 \iff r_i(t) = A_i\cos(\omega_i t + \phi_i)
+\end{equation}
+Because $\widetilde{K}$ is real symmetric its eigenvectors are orthogonal, so the coupled matrix equation is decoupled into $n$ independent modal equations.
+
+\begin{keybox}{Key Result: the modal matrix does both transforms at once}
+Define $S := M^{-1/2}P$, so $\mathbf{x} = S\mathbf{r}$ and initial conditions map with $\mathbf{r}_0 = S^{-1}\mathbf{x}_0$. Each modal coordinate then follows
+\[
+  r_i(t) = \mathrm{sign}(r_{i0})\sqrt{r_{i0}^2 + \frac{\dot{r}_{i0}^2}{\omega_i^2}}\cos\!\left(\omega_i t - \mathrm{atan}\frac{\dot{r}_{i0}}{\omega_i r_{i0}}\right)
+\]
+Then map back with $\mathbf{x} = S\mathbf{r}$.
+\end{keybox}
+
+Exciting a single modal coordinate gives a pure mode (all masses at one frequency). A physical initial condition excites several modes, whose superposition looks complicated even though each modal coordinate is a clean cosine.
+
+\notesfig{fig10_mixed_mode_response.png}{0.62}{A mixed physical initial condition, showing messy physical displacements resolved into three clean modal cosines, cropped from the Unit 7 slides}
+
+The full modal recipe: change coordinates $\mathbf{x}$ to $\mathbf{q}$, solve the symmetric eigenvalue problem for $\widetilde{K}$, change coordinates $\mathbf{q}$ to $\mathbf{r}$, solve with the transformed initial conditions, then map results back $\mathbf{r}$ to $\mathbf{x}$.
+
+\section{Torsional and Free Free Systems}
+A torsional lumped system (disks $I_i$ on a shaft with torsional stiffnesses $K_i$, angles $\theta_i$) corresponds exactly to the axial mass spring chain, with energies
+\begin{equation}
+  T = \sum_{i=1}^{n}\tfrac{1}{2}I_i\dot{\theta}_i^2, \qquad V = \sum_{i=1}^{n}\tfrac{1}{2}K_i(\theta_i - \theta_{i-1})^2
+\end{equation}
+\begin{varlist}
+  \vitem{I_i}{rotational inertia of disk i}{kg\,m^{2}}
+  \vitem{K_i}{torsional stiffness of shaft segment i}{N\,m\,rad^{-1}}
+  \vitem{\theta_i}{angular displacement of disk i}{rad}
+\end{varlist}
+
+\notesfig{fig07_torsional_lumped.png}{0.85}{Torsional lumped system of disks on a shaft, corresponding exactly to the axial chain, cropped from the Unit 6 slides}
+
+\begin{defbox}{Definition: the free free rigid body mode}
+A free free system (no anchoring) always has a rigid body mode at $\omega = 0$ where every inertia moves together. Two disks twisted oppositely then released share momentum, move oppositely and return together: one natural frequency and one node, with the second mode at zero frequency. A three inertia free free system has a zero frequency rigid mode plus two vibrating modes.
+\end{defbox}
+
+\section{Beats and Mode Superposition}
+When two modal frequencies are close, the sum of two cosines rewrites as a slow envelope times a fast carrier:
+\begin{equation}
+  \cos\omega_1 t + \cos\omega_2 t = 2\cos\frac{\omega_1 - \omega_2}{2}t\;\cos\frac{\omega_1 + \omega_2}{2}t
+\end{equation}
+The slow factor is the beat envelope. With $\omega_{1,2} = (1 \pm 0.05)$ rad/s the fast oscillation sits inside a slow envelope, the classic coupled pendulum beat.
+
+\notesfig{fig05_beat_envelopes.png}{0.72}{Beating from two close frequencies, fast oscillation inside slow cosine and sine envelopes, cropped from the Unit 6 slides}
+
+% ============================== KEY SUMMARY ==============================
+\section{Key Summary}
+\begin{itemize}
+  \item Equation of motion for $n$ DoF: $M\ddot{\mathbf{x}} + K\mathbf{x} = \mathbf{0}$.
+  \item Trial solution $\mathbf{x} = \mathbf{x}_0\cos(\omega t + \phi)$ gives the eigenvalue problem $(M^{-1}K - \omega^2 I)\mathbf{x} = \mathbf{0}$.
+  \item The standard approach works only when $M^{-1}K$ is symmetric; it fails for unequal masses.
+  \item Mass normalised stiffness $\widetilde{K} = M^{-1/2}K M^{-1/2}$ is always symmetric.
+  \item Normal coordinates $\mathbf{r} = P^{T}\mathbf{q}$, with $P$ the eigenvectors of $\widetilde{K}$, decouple the system into modal equations $\ddot{r}_i + \omega_i^2 r_i = 0$.
+  \item Modal matrix $S = M^{-1/2}P$ does both transforms at once: $\mathbf{x} = S\mathbf{r}$, $\mathbf{r}_0 = S^{-1}\mathbf{x}_0$.
+  \item Number of modes equals the number of degrees of freedom; $n$ modes have at most $n-1$ nodes; higher modes have more nodes and higher frequency.
+  \item Free free systems always carry a zero frequency rigid body mode.
+  \item Close frequencies produce beats.
+\end{itemize}
+
+% ========================= WORKED EXAMPLES Q&A ==========================
+\section{Worked Examples Q\&A}
+
+\begin{examplebox}{Worked Example: 2 DoF mode shapes (worksheet Exercise 1)}
+\question{A 2 DoF system has $M = I$ kg and $K = \left(\begin{smallmatrix} 3 & -1 \\ -1 & 3 \end{smallmatrix}\right)$ N/m. Verify $\omega_1 = \sqrt{2}$ and $\omega_2 = 2$ rad/s are natural frequencies, find and sketch the mode shapes, and count the nodes.}
+\wstep{1}{Form the eigenvalue matrix. Because $M = I$ the eigenvalue matrix is $A = M^{-1}K = K$.}
+\wstep{2}{Test the claimed frequencies as eigenvalues. With $\lambda_1 = \omega_1^2 = 2$ and $\lambda_2 = \omega_2^2 = 4$, solve $(K - \lambda I)\mathbf{v} = 0$ for each.}
+\wstep{3}{Solve for the eigenvectors. $\lambda = 2$ gives $\mathbf{v}_1 = (1, 1)^{T}$; $\lambda = 4$ gives $\mathbf{v}_2 = (1, -1)^{T}$. Both eigenvector equations are consistent, confirming the eigenvalues.}
+\result{The natural frequencies $\sqrt{2}$ and $2$ rad/s are verified. Mode 1 (both masses moving together) has no node; mode 2 (masses in antiphase) has one node between them. The higher frequency carries the extra node.}
+\end{examplebox}
+
+\begin{examplebox}{Worked Example: free free drivetrain (worksheet Exercise 2)}
+\question{A drivetrain modelled free free has mass matrix $\mathrm{diag}(I_1, 2I_2, I_1)$ and stiffness $\left(\begin{smallmatrix} k_1 & -k_1 & 0 \\ -k_1 & 2k_1 & -k_1 \\ 0 & -k_1 & k_1 \end{smallmatrix}\right)$. Describe the $\omega = 0$ mode, test $\omega_1 = \sqrt{k_1/I_1}$, and predict any further mode.}
+\wstep{1}{Identify the rigid mode. Any free free system has an $\omega = 0$ mode where all inertias rotate at the same angular velocity, the free wheel mode.}
+\wstep{2}{Test $\omega_1$ by substitution. Put $\theta_i = A_i\sin(\omega_1 t)$ with $\omega_1^2 = k_1/I_1$ into the three rows.}
+\wstep{3}{Read the amplitude ratios. Row 1 gives $k_1 A_2 = 0$ so $A_2 = 0$; row 2 gives $A_1 = -A_3$; row 3 is consistent. So $\omega_1$ is genuine: the outer inertias move equally and oppositely while the middle inertia is still, giving one node.}
+\wstep{4}{Count the remaining modes. Three degrees of freedom need three modes; the frequencies found so far are $0$ and $\sqrt{k_1/I_1}$ with zero and one nodes, so one mode remains, carrying two nodes.}
+\result{The model is consistent with $\omega_1 = \sqrt{k_1/I_1}$. The missing third mode has two nodes (outer inertias together, middle opposite), and since more nodes mean higher frequency, $\omega_2 > \omega_1$.}
+\end{examplebox}
+
+\begin{examplebox}{Worked Example: torsional three inertia (worksheet Exercise 3)}
+\question{A light shaft carries three inertias with $\ddot{\boldsymbol{\theta}} + \left(\begin{smallmatrix} 2 & -2 & 0 \\ -2 & 3 & -1 \\ 0 & -1 & 1 \end{smallmatrix}\right)\boldsymbol{\theta} = \mathbf{0}$. The two natural frequencies satisfy $\omega_n^2 = 3 \pm \sqrt{3}$. Find the mode shapes normalised to $\theta_1 = 1$ and comment on the number of modes.}
+\wstep{1}{Recognise the structure. Eigenvectors give the mode shapes and eigenvalues give $\omega_n^2$. Set $A_1 = 1$ and solve $(K - \omega_n^2 I)\mathbf{A} = 0$.}
+\wstep{2}{Read $A_2$ from the top row. The first row $2 - 2A_2 = \omega_n^2$ gives $A_2 = (2 - \omega_n^2)/2$.}
+\wstep{3}{Read $A_3$ from the bottom row. The last row $-A_2 + A_3 = \omega_n^2 A_3$ gives $A_3$ once $A_2$ is known.}
+\result{Mode 1 (for $\omega_n^2 = 3 - \sqrt{3}$): $\left(1, \tfrac{\sqrt{3}-1}{2}, -\tfrac{\sqrt{3}-1}{2(2-\sqrt{3})}\right)$. Mode 2 (for $3 + \sqrt{3}$): $\left(1, -\tfrac{\sqrt{3}+1}{2}, \tfrac{\sqrt{3}+1}{2(2+\sqrt{3})}\right)$. Three inertias in a free free system give only two vibration modes; the third is the rigid body rotation at $\omega_n = 0$.}
+\end{examplebox}
+
+\begin{examplebox}{Worked Example: modal analysis of a three mass chain (Unit 7 slides)}
+\question{Three equal masses $m = 4$ kg on springs $k = 4$ N/m against a fixed wall, released from $x_1(0) = 1$ with all other displacements and all velocities zero. Determine the normal modes and the evolution $\mathbf{x}(t)$.}
+\wstep{1}{Build the modal matrix. Solve the symmetric eigenvalue problem for $\widetilde{K} = M^{-1/2}K M^{-1/2}$ to get eigenvalues $\omega_i^2$ and eigenvector matrix $P$, then $S = M^{-1/2}P$.}
+\wstep{2}{Transform the initial conditions. Compute $\mathbf{r}_0 = S^{-1}\mathbf{x}_0$ and $\dot{\mathbf{r}}_0 = S^{-1}\dot{\mathbf{x}}_0 = \mathbf{0}$.}
+\wstep{3}{Write each modal solution. With zero initial modal velocity each modal coordinate is a pure cosine $r_i(t) = r_{i0}\cos(\omega_i t)$ at its own frequency.}
+\wstep{4}{Map back to physical coordinates with $\mathbf{x}(t) = S\mathbf{r}(t)$.}
+\result{The complicated physical motion is a superposition of three clean modal cosines at the three natural frequencies; exciting a single modal coordinate reproduces one pure mode shape.}
+\end{examplebox}
+
+% ==================== REVISION QUESTIONS AND ANSWERS =====================
+\section{Revision Questions and Answers}
+
+\begin{revisionbox}{Question 1: car pitch and bounce (coupled 2 DoF handout)}
+\question{A car of mass 1600 kg has moment of inertia 2300 kg\,m$^2$ about its centre of mass, located 1.70 m behind the front wheels and 1.35 m in front of the rear wheels. Rear suspension $k_1 = 30.0$ kN/m, front $k_2 = 35.0$ kN/m. (i) Choose coordinates that avoid dynamic coupling if possible. (ii) Find the normal mode frequencies. (iii) Locate the node of each mode.}
+\textbf{(i)} Use the vertical bounce $z$ of the centre of mass and the pitch angle $\theta$. The equations couple through a term in $(k_2 l_2 - k_1 l_1)$, so bounce and pitch decouple only if $k_1 l_1 = k_2 l_2$. Here $k_1 l_1 = 30.0 \times 1.35 = 40.5$ kN and $k_2 l_2 = 35.0 \times 1.70 = 59.5$ kN, which are unequal, so the two motions are statically coupled and must be solved together.
+
+\textbf{(ii)} Form $M = \mathrm{diag}(m, I)$ and the stiffness matrix
+\[
+  K = \begin{bmatrix} k_1 + k_2 & k_2 l_2 - k_1 l_1 \\ k_2 l_2 - k_1 l_1 & k_1 l_1^2 + k_2 l_2^2 \end{bmatrix}
+\]
+then solve $\det(K - \omega^2 M) = 0$ for the two normal mode frequencies, one predominantly bounce and one predominantly pitch.
+
+\textbf{(iii)} Each mode has a node, the point along the car that stays still. Its distance from the centre of mass follows from the amplitude ratio $z/\theta$ of that eigenvector, where the bounce and pitch contributions cancel. The lower frequency mode places its node near or beyond one axle, the higher frequency mode places its node between the axles.
+\end{revisionbox}
+
+\begin{revisionbox}{Question 2: free vibration by modal analysis (Rao Example 6.16)}
+\question{A 2 DoF system has $\mathrm{diag}(m_1, m_2)$ and $\left(\begin{smallmatrix} k_1+k_2 & -k_2 \\ -k_2 & k_2+k_3 \end{smallmatrix}\right)$ with $m_1 = 10, m_2 = 1, k_1 = 30, k_2 = 5, k_3 = 0$, released from $\mathbf{x}(0) = (1, 0)^{T}$ with zero velocity. Find the free vibration response.}
+\wstep{1}{Assemble the matrices. $M = \mathrm{diag}(10, 1)$, $K = \left(\begin{smallmatrix} 35 & -5 \\ -5 & 5 \end{smallmatrix}\right)$.}
+\wstep{2}{Mass normalise. $M^{-1/2} = \mathrm{diag}(1/\sqrt{10}, 1)$, giving $\widetilde{K} = M^{-1/2}K M^{-1/2} = \left(\begin{smallmatrix} 3.5 & -5/\sqrt{10} \\ -5/\sqrt{10} & 5 \end{smallmatrix}\right)$.}
+\wstep{3}{Solve the symmetric eigenvalue problem for $\widetilde{K}$ to get $\omega_1^2, \omega_2^2$ and the orthogonal eigenvectors $P$, then the modal matrix $S = M^{-1/2}P$.}
+\wstep{4}{Transform the initial conditions with $\mathbf{r}_0 = S^{-1}\mathbf{x}_0$ and $\dot{\mathbf{r}}_0 = \mathbf{0}$.}
+\wstep{5}{Write the modal solutions $r_i(t) = r_{i0}\cos(\omega_i t)$ and map back with $\mathbf{x}(t) = S\mathbf{r}(t)$.}
+\result{The response is the sum of the two modes, each oscillating at its own natural frequency, weighted by how strongly the initial displacement projects onto each mode shape.}
+\end{revisionbox}
+
+\begin{revisionbox}{Question 3: mode shape sketch and node count}
+\question{For a symmetric $n$ DoF chain, how many nodes does each mode carry and how does the frequency order relate to the node count?}
+Mode number $j$, ordered by increasing frequency, carries $j-1$ interior nodes, at most one between adjacent masses. The fundamental has none, the highest mode has $n-1$. Since creating an extra node costs more strain energy for a given amplitude, node count rises with frequency, so counting nodes is a quick check on the mode order and on which sketch belongs to which frequency.
+\end{revisionbox}
+
+\end{document}
