@@ -1,0 +1,339 @@
+<title>tailor-notes — how the pipeline runs</title>
+<style>
+  :root {
+    --paper: #fbfbf8;
+    --panel: #ffffff;
+    --ink: #171b21;
+    --ink-soft: #4a525e;
+    --ink-faint: #79828f;
+    --rule: #e4e3dc;
+    --rule-strong: #d2d1c8;
+    --accent: #004a99;
+    --accent-soft: #e7eef7;
+    --c-def: #167a3f;
+    --c-key: #004a99;
+    --c-ex: #5e35b1;
+    --c-warn: #bf7900;
+    --c-rev: #007979;
+    --mono: ui-monospace, "SFMono-Regular", "Cascadia Code", "Consolas", monospace;
+    --sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #10131a;
+      --panel: #171b24;
+      --ink: #eef1f6;
+      --ink-soft: #b3bcc9;
+      --ink-faint: #7c8698;
+      --rule: #262c38;
+      --rule-strong: #333b4a;
+      --accent: #6aa6ec;
+      --accent-soft: #17233a;
+      --c-def: #4cc47f;
+      --c-key: #6aa6ec;
+      --c-ex: #b39ae6;
+      --c-warn: #e0a94a;
+      --c-rev: #4fbdbd;
+    }
+  }
+  :root[data-theme="light"] {
+    --paper: #fbfbf8; --panel: #ffffff; --ink: #171b21; --ink-soft: #4a525e;
+    --ink-faint: #79828f; --rule: #e4e3dc; --rule-strong: #d2d1c8; --accent: #004a99;
+    --accent-soft: #e7eef7; --c-def: #167a3f; --c-key: #004a99; --c-ex: #5e35b1;
+    --c-warn: #bf7900; --c-rev: #007979;
+  }
+  :root[data-theme="dark"] {
+    --paper: #10131a; --panel: #171b24; --ink: #eef1f6; --ink-soft: #b3bcc9;
+    --ink-faint: #7c8698; --rule: #262c38; --rule-strong: #333b4a; --accent: #6aa6ec;
+    --accent-soft: #17233a; --c-def: #4cc47f; --c-key: #6aa6ec; --c-ex: #b39ae6;
+    --c-warn: #e0a94a; --c-rev: #4fbdbd;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 0 24px 96px; }
+
+  /* ---- hero ---- */
+  header.hero { padding: 68px 0 40px; border-bottom: 1px solid var(--rule); }
+  .eyebrow {
+    font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 18px;
+  }
+  h1 {
+    font-family: var(--mono); font-weight: 600; font-size: clamp(30px, 5.2vw, 46px);
+    line-height: 1.08; letter-spacing: -0.01em; margin: 0 0 20px;
+    text-wrap: balance;
+  }
+  h1 .slash { color: var(--accent); }
+  .lede { font-size: 18.5px; color: var(--ink-soft); max-width: 62ch; margin: 0; }
+  .meta-row {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px;
+  }
+  .chip {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.02em;
+    padding: 5px 11px; border: 1px solid var(--rule-strong); border-radius: 999px;
+    color: var(--ink-soft); background: var(--panel);
+  }
+  .chip b { color: var(--ink); font-weight: 600; }
+
+  /* ---- section headers ---- */
+  section { padding-top: 56px; }
+  .sec-label {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-faint); margin: 0 0 6px;
+  }
+  h2 {
+    font-family: var(--mono); font-weight: 600; font-size: 23px; letter-spacing: -0.005em;
+    margin: 0 0 8px;
+  }
+  .sec-sub { color: var(--ink-soft); margin: 0 0 30px; max-width: 64ch; }
+
+  /* ---- pipeline ---- */
+  .flow { display: flex; flex-direction: column; gap: 0; }
+  .stage {
+    position: relative; display: grid; grid-template-columns: 46px 1fr; gap: 20px;
+    padding: 22px 0;
+  }
+  .stage + .stage { border-top: 1px solid var(--rule); }
+  .num {
+    font-family: var(--mono); font-size: 15px; font-weight: 600;
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-soft); color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    font-variant-numeric: tabular-nums;
+  }
+  .stage h3 {
+    font-size: 17px; margin: 5px 0 6px; font-weight: 650; letter-spacing: -0.005em;
+  }
+  .stage p { margin: 0 0 12px; color: var(--ink-soft); font-size: 15px; }
+  .stage p:last-child { margin-bottom: 0; }
+  .cmd {
+    font-family: var(--mono); font-size: 13px; line-height: 1.7;
+    background: var(--panel); border: 1px solid var(--rule);
+    border-left: 3px solid var(--stage, var(--accent));
+    border-radius: 8px; padding: 12px 14px; margin: 0 0 12px;
+    overflow-x: auto; white-space: pre; color: var(--ink);
+  }
+  .cmd .tok-flag { color: var(--accent); }
+  .cmd .tok-cmt { color: var(--ink-faint); }
+  .produces {
+    font-family: var(--mono); font-size: 12.5px; color: var(--ink-faint);
+  }
+  .produces b { color: var(--stage, var(--accent)); font-weight: 600; }
+
+  /* ---- guardrail cards ---- */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--rule); border-radius: 12px;
+    padding: 20px; border-top: 3px solid var(--tone, var(--accent));
+  }
+  .card h3 {
+    font-size: 15.5px; margin: 0 0 8px; font-weight: 650;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card h3 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--tone, var(--accent)); flex: none; }
+  .card p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+
+  /* ---- capabilities table ---- */
+  .caps { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; }
+  .cap { display: grid; grid-template-columns: 130px 1fr; gap: 18px; padding: 16px 20px; background: var(--panel); }
+  .cap + .cap { border-top: 1px solid var(--rule); }
+  .cap code {
+    font-family: var(--mono); font-size: 13px; color: var(--accent);
+    align-self: start; padding-top: 1px;
+  }
+  .cap span { font-size: 14.5px; color: var(--ink-soft); }
+  .cap span b { color: var(--ink); font-weight: 600; }
+
+  /* ---- routine ---- */
+  ol.routine { margin: 0; padding: 0; list-style: none; counter-reset: r; display: flex; flex-direction: column; gap: 14px; }
+  ol.routine li {
+    counter-increment: r; display: grid; grid-template-columns: 30px 1fr; gap: 14px; align-items: baseline;
+    font-size: 15.5px; color: var(--ink-soft);
+  }
+  ol.routine li::before {
+    content: counter(r); font-family: var(--mono); font-size: 13px; font-weight: 600;
+    color: var(--accent); font-variant-numeric: tabular-nums;
+  }
+  ol.routine li b { color: var(--ink); font-weight: 600; }
+  code.inline { font-family: var(--mono); font-size: 0.9em; background: var(--accent-soft); color: var(--accent); padding: 1px 6px; border-radius: 5px; }
+
+  /* ---- proof banner ---- */
+  .proof {
+    margin-top: 56px; background: var(--panel); border: 1px solid var(--rule);
+    border-radius: 14px; padding: 26px 28px;
+    display: flex; flex-wrap: wrap; gap: 26px 40px; align-items: center;
+  }
+  .proof .p-lead { flex: 1 1 240px; }
+  .proof .p-lead h2 { margin: 0 0 6px; }
+  .proof .p-lead p { margin: 0; color: var(--ink-soft); font-size: 14.5px; }
+  .stats { display: flex; gap: 30px; flex-wrap: wrap; }
+  .stat .n { font-family: var(--mono); font-size: 27px; font-weight: 650; color: var(--c-def); font-variant-numeric: tabular-nums; }
+  .stat .l { font-size: 12px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--mono); }
+
+  footer { margin-top: 60px; padding-top: 22px; border-top: 1px solid var(--rule); color: var(--ink-faint); font-size: 13px; font-family: var(--mono); }
+  a { color: var(--accent); }
+  @media (max-width: 560px) {
+    .stage { grid-template-columns: 1fr; gap: 12px; }
+    .num { margin-bottom: 2px; }
+    .cap { grid-template-columns: 1fr; gap: 6px; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">University notes engine · build pipeline</p>
+    <h1><span class="slash">/</span>tailor-notes</h1>
+    <p class="lede">One command turns a folder of lecture slides, worksheets and revision decks into compact, complete, uniformly formatted LaTeX notes. It reads every page as an image, crops the diagrams that matter, drafts a master markdown it can answer questions from later, and compiles a print ready PDF. This is how a run flows.</p>
+    <div class="meta-row">
+      <span class="chip"><b>Input</b> &nbsp;PDF slides, worksheets, solutions</span>
+      <span class="chip"><b>Output</b> &nbsp;markdown + .tex + PDF</span>
+      <span class="chip"><b>Rule</b> &nbsp;each PDF vision read once, ever</span>
+    </div>
+  </header>
+
+  <section>
+    <p class="sec-label">Capability A</p>
+    <h2>Generate a week, stage by stage</h2>
+    <p class="sec-sub">Runs autonomously from the files in a week folder to a committed PDF. Every stage writes its output to disk before the next begins, so an interrupted run resumes for free.</p>
+
+    <div class="flow">
+      <div class="stage" style="--stage:var(--c-key)">
+        <div class="num">1</div>
+        <div>
+          <h3>Inventory the sources</h3>
+          <p>List <code class="inline">sources/</code> ordered by upload time, since that is the order the material was delivered at university. Classify each file as a lecture part, worksheet, solutions, revision deck or extra.</p>
+          <div class="cmd">Get-ChildItem | Sort-Object CreationTime <span class="tok-cmt"># delivery order, not filename</span></div>
+          <p class="produces">→ a processing plan; generated files are never treated as source</p>
+        </div>
+      </div>
+
+      <div class="stage" style="--stage:var(--c-key)">
+        <div class="num">2</div>
+        <div>
+          <h3>Render pages to images</h3>
+          <p>Each source PDF is rasterised at 150 DPI, low enough to keep vision cheap, sharp enough to read every equation and axis label.</p>
+          <div class="cmd">pdftoppm <span class="tok-flag">-png -r 150</span> slides.pdf pages-cache/page</div>
+          <p class="produces">→ <b>pages-cache/</b> (gitignored, regenerable)</p>
+        </div>
+      </div>
+
+      <div class="stage" style="--stage:var(--c-def)">
+        <div class="num">3</div>
+        <div>
+          <h3>Read every page, checkpointed</h3>
+          <p>Pages are read by vision in small batches of five to six, and each batch is appended to an extraction file <em>before</em> the next is read. Text, equations to LaTeX, tables to tabular, and diagrams marked for cropping are all captured. A completed file is stamped and never read again.</p>
+          <div class="cmd">extraction/slides06.md  <span class="tok-cmt"># ← appended per batch</span>
+&lt;!-- EXTRACTION COMPLETE: 31 pages --&gt;</div>
+          <p class="produces">→ <b>extraction/*.md</b> · the checkpoint cache and the run's memory</p>
+        </div>
+      </div>
+
+      <div class="stage" style="--stage:var(--c-ex)">
+        <div class="num">4</div>
+        <div>
+          <h3>Crop the crucial diagrams</h3>
+          <p>Where a figure carries real information, a native crop is cut straight from the original page at 300 DPI. Coordinates measured on the cheap 150 DPI render are scaled up automatically, so no second tool is needed.</p>
+          <div class="cmd">pdftoppm <span class="tok-flag">-r 300 -x -y -W -H</span> -singlefile slides.pdf figures/fig08</div>
+          <p class="produces">→ <b>figures/</b> · sharp cut outs embedded straight into the notes</p>
+        </div>
+      </div>
+
+      <div class="stage" style="--stage:var(--c-rev)">
+        <div class="num">5</div>
+        <div>
+          <h3>Draft the master markdown</h3>
+          <p>The extractions are synthesised into one markdown file in lecture order, compact but losing nothing. This file is the permanent recall source: tutor mode answers from it alone, never re-reading a PDF.</p>
+          <p class="produces">→ <b>CODE_WeekNN_Notes.md</b></p>
+        </div>
+      </div>
+
+      <div class="stage" style="--stage:var(--c-key)">
+        <div class="num">6</div>
+        <div>
+          <h3>Transform to LaTeX and compile</h3>
+          <p>The markdown becomes a <code class="inline">.tex</code> built on the shared style, then compiles twice from the week folder to resolve the contents page and references. Errors are read from the log and fixed until the run is clean.</p>
+          <div class="cmd">$env:TEXINPUTS = <span class="tok-cmt">".;…/templates;"</span>
+pdflatex <span class="tok-flag">-interaction=nonstopmode</span> CODE_WeekNN_Notes.tex  <span class="tok-cmt"># ×2</span></div>
+          <p class="produces">→ <b>CODE_WeekNN_Notes.pdf</b> · page count and warnings reported</p>
+        </div>
+      </div>
+
+      <div class="stage" style="--stage:var(--c-warn)">
+        <div class="num">7</div>
+        <div>
+          <h3>Lint, commit, push</h3>
+          <p>A final pass strips any stray dash or hyphen from prose (open book exam copy safety), then the whole week is committed and pushed to the private GitHub repo.</p>
+          <div class="cmd">git add -A ; git commit -m <span class="tok-cmt">"CODE Week NN notes"</span> ; git push</div>
+          <p class="produces">→ notes backed up and reachable on any device</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="sec-label">Why it stays reliable</p>
+    <h2>Three guardrails</h2>
+    <p class="sec-sub">The command is tuned for a Sonnet class model with thinking on. These three rules are what keep a long, high volume run accurate and resumable.</p>
+    <div class="cards">
+      <div class="card" style="--tone:var(--c-def)">
+        <h3><span class="dot"></span>Checkpoint, never lose work</h3>
+        <p>Small batches written to disk as they go mean an API error or interruption costs nothing. Rerunning skips any file already stamped complete, so no page is ever read twice.</p>
+      </div>
+      <div class="card" style="--tone:var(--c-ex)">
+        <h3><span class="dot"></span>The files are the memory</h3>
+        <p>Extractions feed the markdown, the markdown feeds the PDF, and tutor mode reads only the markdown. Nothing depends on holding a 150 page week in one context.</p>
+      </div>
+      <div class="card" style="--tone:var(--c-warn)">
+        <h3><span class="dot"></span>Prescriptive formatting</h3>
+        <p>Every equation gets a variable list, every worked example gets numbered steps, every box title is braced. Uniform by construction, identical every week.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <p class="sec-label">Beyond generation</p>
+    <h2>The other four capabilities</h2>
+    <p class="sec-sub">Same command, routed by what you ask for.</p>
+    <div class="caps">
+      <div class="cap"><code>tutor</code><span><b>Ask anything from your notes.</b> Answers from the master markdown only, so recall costs almost nothing and never re-reads a slide.</span></div>
+      <div class="cap"><code>worksheet</code><span><b>Fold in a worksheet and its solutions.</b> Adds each solved problem to that week's worked examples, in the same step by step format, then recompiles.</span></div>
+      <div class="cap"><code>new module</code><span><b>Scaffold a module in seconds.</b> Creates the module record and a folder per teaching week. Works for any module, nothing is hard coded.</span></div>
+      <div class="cap"><code>sync</code><span><b>Commit and push on demand.</b> A manual save point whenever you want one.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="sec-label">Your side of it</p>
+    <h2>The weekly routine</h2>
+    <p class="sec-sub">One Cowork project per module, one chat per week.</p>
+    <ol class="routine">
+      <li><span>Drop the week's files into <code class="inline">Week NN/sources/</code>, uploaded <b>in delivery order</b>.</span></li>
+      <li><span>Start a fresh chat and run <code class="inline">/tailor-notes Week&nbsp;NN</code>. It runs to a compiled PDF on its own.</span></li>
+      <li><span>Ask follow up questions in the same chat all week; tutor mode recalls from the markdown.</span></li>
+      <li><span>Next week, new chat. Old chats are safe to delete: everything lasting lives in the repo and on GitHub.</span></li>
+    </ol>
+  </section>
+
+  <div class="proof">
+    <div class="p-lead">
+      <h2>Proven end to end</h2>
+      <p>A real test run on ES386 Week 6: two lecture decks, a worksheet with solutions and a handout, 89 slide pages in all.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="n">89</div><div class="l">pages read</div></div>
+      <div class="stat"><div class="n">5</div><div class="l">figures cropped</div></div>
+      <div class="stat"><div class="n">7</div><div class="l">page PDF</div></div>
+      <div class="stat"><div class="n">0</div><div class="l">errors</div></div>
+    </div>
+  </div>
+
+  <footer>
+    uni-notes · /tailor-notes · shared style in templates/uninotes.sty · model guidance in docs/MODEL.md
+  </footer>
+</div>
