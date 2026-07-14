@@ -5,8 +5,8 @@
 \ProvidesPackage{uninotes}[2026/07/07 v1.0 Uniform university notes style]
 
 % ---------------------------------------------------------------- geometry
-% Tight margins for booklet printing, but with enough breathing room to read.
-\RequirePackage[a4paper,margin=1.6cm,headheight=14pt,headsep=0.35cm,footskip=0.9cm]{geometry}
+% Compact margins for booklet printing: 1cm on every side.
+\RequirePackage[a4paper,margin=1cm,headheight=14pt,headsep=0.3cm,footskip=0.8cm]{geometry}
 
 % ---------------------------------------------------------------- base
 \RequirePackage[T1]{fontenc}
@@ -44,24 +44,26 @@
 \RequirePackage[colorlinks=true,linkcolor=notesblue,urlcolor=notesblue]{hyperref}
 
 % -------------------------------------------------------- module identity
-% Each week's document sets these three values once, right after loading the
+% Each week's document sets these four values once, right after loading the
 % package. They drive the header and the title block.
-%   \notesmodule{ES3E8}{Instrumentation and Measurement}{5}
+%   \notesmodule{ES3E8}{Instrumentation and Measurement}{5}{Bridge Circuits}
 \newcommand{\unimodulecode}{MODULE}
 \newcommand{\unimodulename}{Module Name}
 \newcommand{\uniweeknumber}{0}
-\newcommand{\notesmodule}[3]{%
+\newcommand{\uniweektitle}{}
+\newcommand{\notesmodule}[4]{%
   \renewcommand{\unimodulecode}{#1}%
   \renewcommand{\unimodulename}{#2}%
   \renewcommand{\uniweeknumber}{#3}%
+  \renewcommand{\uniweektitle}{#4}%
 }
 
 % ------------------------------------------------------------ header/footer
-% Header text is fixed by convention: "MODULENUMBER: MODULE NAME - WEEK NUMBER Notes"
+% Header sits top RIGHT, fixed format: "ModuleNumber ModuleName - Week X : WeekTitle"
 % Page number centred in the footer.
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[C]{\small\itshape \unimodulecode: \unimodulename\ - Week \uniweeknumber\ Notes}
+\fancyhead[R]{\small\itshape \unimodulecode\ \unimodulename\ - Week \uniweeknumber\ : \uniweektitle}
 \fancyfoot[C]{\small\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0pt}

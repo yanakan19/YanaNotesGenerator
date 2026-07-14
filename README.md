@@ -103,7 +103,7 @@ Full illustrated version in [`docs/how-it-works.html`](docs/how-it-works.html).
 
 Enforced by the command on every document, so all notes look identical:
 
-- **Header** reads `MODULECODE: Module Name - Week N Notes`; page numbers centred in the footer; a one page contents; tight booklet margins for printing.
+- **Header** sits top right and reads `MODULECODE Module Name - Week N : Week Title`; page numbers centred in the footer; a one page contents; 1cm margins all around for compact booklet printing.
 - **No dashes or hyphens in prose**, so text pastes cleanly into an open book exam answer; line break hyphenation is disabled too.
 - **Every equation** is centred and followed on first use by a `Term: FullName (UNITS)` variable list.
 - **Worked examples and revision questions** are in Q&A format with `Step X:` explanations mirroring the official solution method.

@@ -93,7 +93,7 @@ $ARGUMENTS
 
 **A5. Master markdown.** Synthesise `MODULE_WeekNN_Notes.md` from the extraction files (do not re-read images): full lecture content in delivery order obeying every writing rule, then Key Summary, Worked Examples Q&A, Revision Questions and Answers (every revision question answered fully, tutor style, numerical ones in worked example format). Equations in LaTeX math with their variable lists. Reference cropped figures by filename. This file is the permanent recall source for tutor mode.
 
-**A6. LaTeX and compile.** Instantiate `templates/week_template.tex` as `MODULE_WeekNN_Notes.tex` in the week folder, set `\notesmodule{CODE}{Full Name}{N}` from `module.md`, and transform the master markdown into LaTeX using the template's environments. Compile FROM the week folder, twice:
+**A6. LaTeX and compile.** Instantiate `templates/week_template.tex` as `MODULE_WeekNN_Notes.tex` in the week folder, set `\notesmodule{CODE}{Full Name}{N}{Week Title}` from `module.md` (the week title is a short topic label for that week, e.g. "Coupled and n DoF Vibrating Systems", so the header reads `CODE Full Name - Week N : Week Title` in the top right corner), and transform the master markdown into LaTeX using the template's environments. Compile FROM the week folder, twice:
 ```powershell
 Set-Location "<week folder>"
 $env:TEXINPUTS = ".;C:\Users\mryx1\repos\YanaNotesGenerator\templates;"
@@ -115,7 +115,7 @@ git -C "C:\Users\mryx1\repos\YanaNotesGenerator" push
 ```
 (If push fails because no remote/auth, say so and continue; notes are still saved locally.)
 
-**A9. Deliver.** Attach the PDF (and the .md) as downloadable files in the chat AND state the saved folder path in plain text. End with a two line recap: pages, sections, number of worked examples and revision questions captured.
+**A9. Deliver.** ALWAYS attach the compiled PDF, the `.tex`, and the master `.md` as downloadable files in the chat, in that order, every single run (never skip the attachments even if nothing looks wrong) AND state the saved folder path in plain text. End with a two line recap: pages, sections, number of worked examples and revision questions captured.
 
 ---
 
