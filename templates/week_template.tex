@@ -13,14 +13,24 @@
 
 \notestitle
 
-% Contents page: must fit on one page (uninotes.sty keeps it compact).
-\tableofcontents
+% Contents page: HARD RULE, must fit on one page, and is always plain black
+% and white. Use \notestoc, NOT bare \tableofcontents, every week: it wraps
+% the same call with the link colour forced to black (hyperref patches
+% \tableofcontents itself at \begin{document}, so a plain \tableofcontents
+% here would render with coloured entries again).
+% If it does not fit at default sizing, add \tightertoc on the line above
+% \notestoc; if it still does not fit, add
+% \setcounter{tocdepth}{1} above it too (sections only, no subsections).
+\notestoc
 \newpage
 
 % ============================ LECTURE CONTENT ============================
 % Sections/subsections in lecture delivery order.
-% Every displayed equation is followed by a varlist block (first use only):
 %
+% Every displayed equation OUTSIDE worked examples goes in a RED eqnbox
+% together with its varlist, in the SAME box (first use only):
+%
+%   \begin{eqnbox}
 %   \begin{equation} e_0 = Blv \end{equation}
 %   \begin{varlist}
 %     \vitem{e_0}{output voltage}{V}
@@ -28,8 +38,28 @@
 %     \vitem{l}{conductor length}{m}
 %     \vitem{v}{velocity}{m\,s^{-1}}
 %   \end{varlist}
+%   \end{eqnbox}
 %
-% Boxes (titles ALWAYS in braces):
+% Definition vs equation, pick BOTH when both exist in the source:
+%   - Source gives a written definition AND a formula for the same concept:
+%     write the prose definition in a defbox, and the formula + varlist in
+%     an eqnbox directly after it, both present.
+%   - Source gives ONLY a formula, no written definition: derive a one
+%     sentence definition ("Aspect Ratio is the ratio of...") and put it as
+%     the opening line inside the eqnbox, above the equation, rather than
+%     inventing a separate defbox.
+% (This eqnbox rule does not apply inside \begin{examplebox} worked
+% examples; equations there stay plain \begin{align}/\begin{equation}.)
+%
+% Worked examples that the lecture itself walks through belong INLINE, in
+% an examplebox right where the lecture presents them (do not move them to
+% the end). Only worked examples that come from a separate worksheet,
+% solutions sheet, or revision deck, or that are not tied to one specific
+% point in the lecture, go in the trailing "Worked Examples Q\&A" section.
+%
+% Other boxes (titles ALWAYS in braces, ALWAYS Title Case after the colon,
+% e.g. "Key Result: Dependent Suspension Coupling" not "Key Result:
+% dependent suspension coupling"):
 %   \begin{defbox}{Definition: ...} ... \end{defbox}
 %   \begin{keybox}{Key Result: ...} ... \end{keybox}
 %   \begin{warningbox}{Pitfall: ...} ... \end{warningbox}
@@ -44,10 +74,13 @@
 
 % ========================= WORKED EXAMPLES Q\&A ==========================
 \section{Worked Examples Q\&A}
-% EVERY worked example from the lecture slides AND the worksheets/solutions,
-% in Q&A format mirroring the official solution method:
+% ONLY worked examples from worksheets/solutions/revision decks, or ones not
+% tied to a specific point in the lecture flow. (Worked examples the lecture
+% itself walks through stay inline in the lecture content above, in
+% delivery order, not here.) Q&A format mirroring the official solution
+% method:
 %
-%   \begin{examplebox}{Worked Example: vibrometer amplitude ratio}
+%   \begin{examplebox}{Worked Example: Vibrometer Amplitude Ratio}
 %     \question{...problem exactly as given...}
 %     \wstep{1}{Explain in plain English what is done and why}
 %     \begin{align} ... \end{align}

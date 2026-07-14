@@ -7,7 +7,7 @@
 
 \notestitle
 
-\tableofcontents
+\notestoc
 \newpage
 
 % ============================ LECTURE CONTENT ============================
@@ -32,7 +32,7 @@ Suspension architectures divide into two broad families depending on whether the
 
 In a dependent arrangement the left and right wheels are connected by a rigid beam axle. Consequently, when one wheel strikes a bump and its hub rises, the axle tilts and the opposite wheel is forced to change camber angle even though it has experienced no road disturbance. This kinematic coupling degrades handling on uneven surfaces because the tyre contact patch on the undisturbed side is no longer perpendicular to the road. Dependent suspensions are mechanically simple, robust, and inexpensive; they remain common on commercial vehicles, trucks, and the rear axles of budget passenger cars where load carrying capacity is prioritised over handling refinement.
 
-\begin{keybox}{Key Result: dependent suspension coupling}
+\begin{keybox}{Key Result: Dependent Suspension Coupling}
 When one wheel rises over a bump the solid axle tilts, forcing the opposite wheel to change camber. Both wheels are always kinematically coupled.
 \end{keybox}
 
@@ -40,7 +40,7 @@ When one wheel rises over a bump the solid axle tilts, forcing the opposite whee
 
 In an independent arrangement each wheel is connected to the body through its own linkage. A bump experienced by one wheel does not change the kinematics of the opposite wheel. This allows each tyre to maintain optimal contact with the road surface independently, improving grip, ride comfort, and handling. Independent suspensions are more complex and expensive but are now standard on the front axles of virtually all passenger cars and on the rear axles of performance vehicles.
 
-\begin{keybox}{Key Result: independent suspension decoupling}
+\begin{keybox}{Key Result: Independent Suspension Decoupling}
 Each wheel has its own linkage to the body. A bump on one wheel has no kinematic effect on the opposite wheel.
 \end{keybox}
 
@@ -82,6 +82,7 @@ Reducing unsprung mass improves every major dynamic metric simultaneously. A lig
 
 Components that move with the wheel fully (motion ratio = 1) contribute their full mass. Components attached to the body at one end (motion ratio $<1$) contribute only a fraction of their mass, specifically:
 
+\begin{eqnbox}
 \begin{equation}
 m_{\text{eff}} = m_{\text{component}} \times \left(\frac{a}{L}\right)^2
 \end{equation}
@@ -90,6 +91,7 @@ m_{\text{eff}} = m_{\text{component}} \times \left(\frac{a}{L}\right)^2
 \vitem{m_{\text{component}}}{actual mass of the component}{kg}
 \vitemnd{a/L}{motion ratio, component displacement over wheel displacement}
 \end{varlist}
+\end{eqnbox}
 
 The table below lists representative values for a typical formula style race car corner.
 
@@ -116,7 +118,29 @@ Half-shaft & 20.0 & 0.50 & 10.000 \\
 \end{tabular}
 \end{center}
 
-\begin{keybox}{Key Result: total unsprung mass}
+\begin{examplebox}{Worked Example: Unsprung Mass Accounting}
+\question{A single suspension corner has the following components and motion ratios: knuckle/upright 7.0\,kg (ratio 1.00), bearing 4.0\,kg (ratio 1.00), wheel 15.0\,kg (ratio 1.00), tyre 20.0\,kg (ratio 1.00), brake caliper 7.0\,kg (ratio 1.00), brake rotor 12.0\,kg (ratio 1.00), lower control arm 4.0\,kg (ratio 0.33), upper control arm 2.5\,kg (ratio 0.33), tie rod 1.5\,kg (ratio 0.50), spring 5.0\,kg (ratio 0.75), damper 8.0\,kg (ratio 0.75), half shaft 20.0\,kg (ratio 0.50). Find the total effective unsprung mass for this corner.}
+
+\wstep{1}{Identify which components move fully with the wheel. Any component with motion ratio 1.00 contributes its full mass directly, since it has no lever reduction between the wheel and the component.}
+\begin{align}
+m_{\text{eff, full ratio}} &= 7.0 + 4.0 + 15.0 + 20.0 + 7.0 + 12.0 = 65.0\ \text{kg}
+\end{align}
+
+\wstep{2}{Apply the motion ratio formula to every component with a ratio below 1, since only a fraction of its displacement (and therefore its dynamic effect) is seen at the wheel.}
+\begin{align}
+m_{\text{eff}} = m_{\text{component}} \times \left(\frac{a}{L}\right)^2
+\end{align}
+Lower control arm: $4.0 \times 0.33^2 = 1.320$\,kg. Upper control arm: $2.5 \times 0.33^2 = 0.825$\,kg. Tie rod: $1.5 \times 0.50^2 = 0.750$\,kg. Spring: $5.0 \times 0.75^2 = 1.875$\,kg. Damper: $8.0 \times 0.75^2 = 4.020$\,kg. Half shaft: $20.0 \times 0.50^2 = 10.000$\,kg.
+
+\wstep{3}{Sum every effective contribution, full ratio components plus reduced ratio components, to get the total effective unsprung mass for the corner.}
+\begin{align}
+m_{\text{total}} = 65.0 + 1.320 + 0.825 + 0.750 + 1.875 + 4.020 + 10.000 = 83.79 \approx 83.8\ \text{kg}
+\end{align}
+
+\result{The total effective unsprung mass is approximately 83.8\,kg per corner. This is the mass whose dynamics govern wheel hop frequency and road contact quality; reducing any high mass, high ratio item (here the tyre, wheel, and rotor dominate) gives the largest gain in grip, braking distance, and ride comfort.}
+\end{examplebox}
+
+\begin{keybox}{Key Result: Total Unsprung Mass}
 For a representative single corner: total effective unsprung mass is approximately 83.8\,kg. Reducing this value improves acceleration, braking, handling, ride comfort, and fuel consumption simultaneously.
 \end{keybox}
 
@@ -207,7 +231,7 @@ Alloy & Alloying Elements & Key Properties \\
 \end{tabular}
 \end{center}
 
-\begin{keybox}{Key Result: aluminium alloy families}
+\begin{keybox}{Key Result: Aluminium Alloy Families}
 6061: Mg+Si, best all round. 7075: Zn+Cu, highest strength and fatigue resistance, poor corrosion. 5083: Mg, best corrosion/welding (marine). 6063: Mg+Si, extrusions. 6016: Si+Mn, high strength plus formability.
 \end{keybox}
 
@@ -279,7 +303,7 @@ LH & Left hand thread (absent implies right hand) \\
 
 For an internal thread the tolerance designator uses uppercase letters, e.g. M16 $\times$ 1.5 6H (6H = standard tolerance for internal thread pitch diameter).
 
-\begin{keybox}{Key Result: metric thread notation}
+\begin{keybox}{Key Result: Metric Thread Notation}
 M16 $\times$ 1.5 5g6g LH: M = metric; 16 = major diameter (mm); 1.5 = pitch (mm); 5g6g = tolerance class (lower case = external); LH = left hand. Internal: uppercase, e.g.\ 6H.
 \end{keybox}
 
@@ -299,7 +323,7 @@ ISO Class & Min UTS (MPa) & Approximate AISI Steel & SAE/ASTM Equivalent \\
 \end{tabular}
 \end{center}
 
-\begin{keybox}{Key Result: bolt grade facts}
+\begin{keybox}{Key Result: Bolt Grade Facts}
 Class 8.8: 800\,MPa min UTS, approximately SAE Grade 5. Class 10.9: 1000\,MPa, approximately SAE Grade 8. Class 12.9: 1200\,MPa, no direct imperial equivalent.
 \end{keybox}
 
@@ -346,18 +370,38 @@ V & V & Speed rating (up to 240\,km/h) \\
 \end{tabular}
 \end{center}
 
-\begin{defbox}{Tyre Aspect Ratio: Definition}
+\begin{eqnbox}
+Aspect Ratio is the ratio of the tyre section height to the section width, expressed as a percentage.
 \begin{equation}
 \text{Aspect Ratio} = \frac{\text{Section Height}}{\text{Section Width}} \times 100\%
 \end{equation}
-\end{defbox}
 \begin{varlist}
 \vitemnd{\text{Aspect Ratio}}{ratio of tyre section height to section width, expressed as a percentage}
 \vitem{\text{Section Height}}{height of the tyre sidewall from rim to tread}{mm}
 \vitem{\text{Section Width}}{widest point of the tyre cross section}{mm}
 \end{varlist}
+\end{eqnbox}
 
-For a 195/55 tyre: section height $= 0.55 \times 195 = 107.25$\,mm.
+\begin{examplebox}{Worked Example: Tyre Aspect Ratio and Section Height}
+\question{A tyre is marked 195/55\,R16\,87V. Calculate the section height of the tyre.}
+
+\wstep{1}{Read the aspect ratio directly from the marking. The second number in a tyre marking is always the aspect ratio as a percentage of the section width.}
+Section width = 195\,mm. Aspect ratio = 55\%.
+
+\wstep{2}{Apply the aspect ratio definition, rearranged to solve for section height, since aspect ratio relates section height to section width.}
+\begin{align}
+\text{Aspect Ratio} = \frac{\text{Section Height}}{\text{Section Width}} \times 100\%
+\ \Rightarrow\
+\text{Section Height} = \frac{\text{Aspect Ratio}}{100\%} \times \text{Section Width}
+\end{align}
+
+\wstep{3}{Substitute the known values and evaluate.}
+\begin{align}
+\text{Section Height} = 0.55 \times 195 = 107.25\ \text{mm}
+\end{align}
+
+\result{The tyre section height is 107.25\,mm. This value, doubled and added to the nominal rim diameter, gives the tyre's overall rolling diameter, which is important for speedometer calibration and gearing calculations.}
+\end{examplebox}
 
 Other key tyre dimensions: overall diameter = nominal rim diameter plus 2 $\times$ section height; section width (actual moulded width) is greater than or equal to the tyre marking width; tread width (width of rubber in contact with road) is less than section width; rim width = the internal rim barrel width, which must match the tyre's permissible rim width range.
 
@@ -391,7 +435,7 @@ When a pneumatic tyre supports a vehicle load, the tyre carcass deforms and a fi
 
 The friction coefficient between a tyre and the road surface, $\mu$, is not a simple material constant. It is highly dependent on tyre compound, tread pattern, road surface texture, temperature, speed, and presence of contaminants (water, oil, rubber debris). Values must be obtained from direct tyre performance testing. The range encountered in automotive contexts spans approximately $\mu \approx 0.05$ (wet ice, worn tyre) to $\mu \approx 2$ (racing slick on dry abrasive tarmac at optimal temperature).
 
-\begin{keybox}{Key Result: tyre friction coefficient range}
+\begin{keybox}{Key Result: Tyre Friction Coefficient Range}
 The tyre road friction coefficient $\mu$ is experimentally determined. Typical range: $\mu \approx 0.05$ (wet ice) to $\mu \approx 2$ (racing slick, dry). No single tabulated value is reliable; always use data from tyre performance testing.
 \end{keybox}
 
@@ -413,7 +457,7 @@ Additionally, braking generates a torque $\tau_r$ at the wheel (from the brake r
 \vitem{\tau_r}{braking torque at the wheel}{N\,m}
 \end{varlist}
 
-\begin{keybox}{Key Result: forces at the contact patch}
+\begin{keybox}{Key Result: Forces at the Contact Patch}
 $F_w$: vertical reaction (normal) force from road. $F_T$: tangential friction (tractive) force, braking/propulsion. $F_{si}$: lateral force(s), cornering. $\tau_r$: braking torque at wheel. Note: acceleration (drivetrain) forces act at the wheel centre, not the contact patch.
 \end{keybox}
 
@@ -439,50 +483,9 @@ $F_w$: vertical reaction (normal) force from road. $F_T$: tangential friction (t
 % ========================= WORKED EXAMPLES Q\&A ==========================
 \section{Worked Examples Q\&A}
 
-\begin{examplebox}{Worked Example: unsprung mass accounting}
-\question{A single suspension corner has the following components and motion ratios: knuckle/upright 7.0\,kg (ratio 1.00), bearing 4.0\,kg (ratio 1.00), wheel 15.0\,kg (ratio 1.00), tyre 20.0\,kg (ratio 1.00), brake caliper 7.0\,kg (ratio 1.00), brake rotor 12.0\,kg (ratio 1.00), lower control arm 4.0\,kg (ratio 0.33), upper control arm 2.5\,kg (ratio 0.33), tie rod 1.5\,kg (ratio 0.50), spring 5.0\,kg (ratio 0.75), damper 8.0\,kg (ratio 0.75), half shaft 20.0\,kg (ratio 0.50). Find the total effective unsprung mass for this corner.}
+The unsprung mass accounting example and the tyre aspect ratio example are kept inline in sections 3.1 and 8.2 above, where the lecture itself presents them. This section holds only the consolidation example below, which the source itself treats as a standalone section (its own numbered section 10, drawing on the separate Activity Slides) rather than a point embedded in one lecture topic.
 
-\wstep{1}{Identify which components move fully with the wheel. Any component with motion ratio 1.00 contributes its full mass directly, since it has no lever reduction between the wheel and the component.}
-\begin{align}
-m_{\text{eff, full ratio}} &= 7.0 + 4.0 + 15.0 + 20.0 + 7.0 + 12.0 = 65.0\ \text{kg}
-\end{align}
-
-\wstep{2}{Apply the motion ratio formula to every component with a ratio below 1, since only a fraction of its displacement (and therefore its dynamic effect) is seen at the wheel.}
-\begin{align}
-m_{\text{eff}} = m_{\text{component}} \times \left(\frac{a}{L}\right)^2
-\end{align}
-Lower control arm: $4.0 \times 0.33^2 = 1.320$\,kg. Upper control arm: $2.5 \times 0.33^2 = 0.825$\,kg. Tie rod: $1.5 \times 0.50^2 = 0.750$\,kg. Spring: $5.0 \times 0.75^2 = 1.875$\,kg. Damper: $8.0 \times 0.75^2 = 4.020$\,kg. Half shaft: $20.0 \times 0.50^2 = 10.000$\,kg.
-
-\wstep{3}{Sum every effective contribution, full ratio components plus reduced ratio components, to get the total effective unsprung mass for the corner.}
-\begin{align}
-m_{\text{total}} = 65.0 + 1.320 + 0.825 + 0.750 + 1.875 + 4.020 + 10.000 = 83.79 \approx 83.8\ \text{kg}
-\end{align}
-
-\result{The total effective unsprung mass is approximately 83.8\,kg per corner. This is the mass whose dynamics govern wheel hop frequency and road contact quality; reducing any high mass, high ratio item (here the tyre, wheel, and rotor dominate) gives the largest gain in grip, braking distance, and ride comfort.}
-\end{examplebox}
-
-\begin{examplebox}{Worked Example: tyre aspect ratio and section height}
-\question{A tyre is marked 195/55\,R16\,87V. Calculate the section height of the tyre.}
-
-\wstep{1}{Read the aspect ratio directly from the marking. The second number in a tyre marking is always the aspect ratio as a percentage of the section width.}
-Section width = 195\,mm. Aspect ratio = 55\%.
-
-\wstep{2}{Apply the aspect ratio definition, rearranged to solve for section height, since aspect ratio relates section height to section width.}
-\begin{align}
-\text{Aspect Ratio} = \frac{\text{Section Height}}{\text{Section Width}} \times 100\%
-\ \Rightarrow\
-\text{Section Height} = \frac{\text{Aspect Ratio}}{100\%} \times \text{Section Width}
-\end{align}
-
-\wstep{3}{Substitute the known values and evaluate.}
-\begin{align}
-\text{Section Height} = 0.55 \times 195 = 107.25\ \text{mm}
-\end{align}
-
-\result{The tyre section height is 107.25\,mm. This value, doubled and added to the nominal rim diameter, gives the tyre's overall rolling diameter, which is important for speedometer calibration and gearing calculations.}
-\end{examplebox}
-
-\begin{examplebox}{Worked Example: the wheel dimension design cascade}
+\begin{examplebox}{Worked Example: The Wheel Dimension Design Cascade}
 \question{Explain why the wheel specification must be finalised before the brake package, hub, and bearing can be designed, and what happens if the rim diameter is later increased by 1 inch.}
 
 \wstep{1}{Identify the first constraint in the chain. The wheel envelope, meaning the outer diameter and the rim diameter, sets a hard physical limit on how large a brake disc and caliper can be packaged inside the wheel without fouling the rim or spokes.}

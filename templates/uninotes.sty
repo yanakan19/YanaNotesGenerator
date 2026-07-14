@@ -40,6 +40,7 @@
 \definecolor{exampleviolet}{RGB}{94,53,177}% worked examples
 \definecolor{warnamber}{RGB}{191,121,0}    % warnings / pitfalls
 \definecolor{revteal}{RGB}{0,121,121}      % revision Q&A
+\definecolor{eqnred}{RGB}{178,34,34}       % equations
 
 \RequirePackage[colorlinks=true,linkcolor=notesblue,urlcolor=notesblue]{hyperref}
 
@@ -77,9 +78,11 @@
 \titlespacing*{\subsubsection}{0pt}{5pt}{2pt}
 
 % -------------------------------------------------------- compact contents
-% The table of contents must always fit on one page.
+% HARD RULE: the table of contents must always fit on one page. It is also
+% always plain black and white, never coloured, regardless of the document's
+% link colour settings elsewhere.
 \setcounter{tocdepth}{2}
-\renewcommand{\cfttoctitlefont}{\Large\bfseries\color{notesblue}}
+\renewcommand{\cfttoctitlefont}{\Large\bfseries}
 \renewcommand{\cftsecfont}{\small\bfseries}
 \renewcommand{\cftsecpagefont}{\small\bfseries}
 \renewcommand{\cftsubsecfont}{\footnotesize}
@@ -88,6 +91,29 @@
 \setlength{\cftbeforesubsecskip}{0.5pt}
 \setlength{\cftbeforetoctitleskip}{0pt}
 \setlength{\cftaftertoctitleskip}{6pt}
+
+% Force the contents page to render in black and white even though the rest
+% of the document uses coloured hyperlinks (linkcolor=notesblue below): every
+% \tableofcontents entry, including its page number link, is black. This
+% MUST be invoked as \notestoc (not bare \tableofcontents) from inside the
+% document body: hyperref patches \tableofcontents itself at \begin{document}
+% time, which runs after any package-level redefinition here and would
+% silently clobber one, so the override has to be applied at the call site.
+\newcommand{\notestoc}{{\hypersetup{linkcolor=black}\tableofcontents}}
+
+% Escalation lever for weeks with many sections: if the contents page does
+% not fit on one page at the default sizing above, call \tightertoc
+% immediately before \tableofcontents (this call only, does not alter other
+% weeks). If it still does not fit, drop to \setcounter{tocdepth}{1} in that
+% week's .tex (sections only, no subsections listed).
+\newcommand{\tightertoc}{%
+  \renewcommand{\cftsecfont}{\footnotesize\bfseries}%
+  \renewcommand{\cftsecpagefont}{\footnotesize\bfseries}%
+  \renewcommand{\cftsubsecfont}{\scriptsize}%
+  \renewcommand{\cftsubsecpagefont}{\scriptsize}%
+  \setlength{\cftbeforesecskip}{1pt}%
+  \setlength{\cftbeforesubsecskip}{0pt}%
+}
 
 % ------------------------------------------------------------- title block
 \newcommand{\notestitle}{%
@@ -135,6 +161,15 @@
 \newtcolorbox{revisionbox}[1]{enhanced,breakable,
   colback=revteal!5,colframe=revteal,title={#1},fonttitle=\bfseries\small,
   boxrule=0.7pt,arc=1.5pt,left=5pt,right=5pt,top=3pt,bottom=3pt,
+  before skip=6pt,after skip=6pt}
+% eqnbox: every displayed equation OUTSIDE worked examples lives in one of
+% these, untitled, red framed so it is instantly visually distinct from
+% definitions (green) and key results (blue). Its varlist goes INSIDE the
+% same box, directly under the equation, not as a separate block after it.
+% Equations inside \begin{examplebox} worked examples never use eqnbox.
+\newtcolorbox{eqnbox}{enhanced,breakable,
+  colback=eqnred!4,colframe=eqnred,
+  boxrule=0.9pt,arc=1.5pt,left=6pt,right=6pt,top=4pt,bottom=4pt,
   before skip=6pt,after skip=6pt}
 
 % --------------------------------------------------- worked example helpers
