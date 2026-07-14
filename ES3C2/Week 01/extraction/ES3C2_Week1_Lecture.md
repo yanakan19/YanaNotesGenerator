@@ -1,0 +1,382 @@
+## Page 1
+
+Title page. ES3C2 Advanced Mechanical Engineering Design, Week 1 Revision Notes, University of Warwick, 2025 to 26. Followed by a full table of contents (sections 1 to 10, subsections listed). Not examinable content, one line note only.
+
+## Page 2
+
+Contents page continued: section 8 Tyres (8.1 to 8.5), section 9 Road Contact and Tyre Forces (9.1 to 9.3), section 10 Worked Example: Wheel Modelling and Design Decisions. Not examinable content, one line note only.
+
+## Page 3
+
+### 1 Introduction to Vehicle Suspensions
+
+The suspension system performs two distinct but coupled roles. First, it carries the vehicle weight and allows the wheels to move relative to the body over road irregularities. Second, it transmits the longitudinal and lateral forces generated at the tyre road contact patch back into the chassis; without this load path the vehicle could not accelerate, brake, or steer. A common misconception is that the suspension also damps oscillations: damping is performed by a separate element (the shock absorber or damper), whose role is specifically to regulate the rate at which the suspension reacts, not to support the load.
+
+**Key Definitions: Suspension vs Damping** (definition box)
+Suspension: the system of components that carries the vehicle weight, allows relative motion between the wheel and the body, and transmits longitudinal and lateral forces for propulsion, braking, and steering.
+Damping: the process of dissipating oscillatory energy to regulate how quickly the suspension responds to a disturbance. Performed by the damper or shock absorber, not by the spring or linkage.
+
+The primary mechanical task of the suspension can therefore be summarised as: transmit longitudinal and lateral forces from the tyre contact patch to the vehicle structure while accommodating vertical wheel travel. This single sentence covers propulsion (longitudinal), braking (longitudinal), cornering (lateral), and bump absorption (vertical compliance).
+
+### 2 Suspension Types
+
+Suspension architectures divide into two broad families depending on whether the two wheels on the same axle are kinematically linked.
+
+#### 2.1 Dependent (Solid Axle) Suspension
+
+In a dependent arrangement the left and right wheels are connected by a rigid beam axle. Consequently, when one wheel strikes a bump and its hub rises, the axle tilts and the opposite wheel is forced to change camber angle even though it has experienced no road disturbance. This kinematic coupling degrades handling on uneven surfaces because the tyre contact patch on the undisturbed side is no longer perpendicular to the road. Dependent suspensions are mechanically simple, robust, and inexpensive; they remain common on commercial vehicles, trucks, and the rear axles of budget passenger cars where load carrying capacity is prioritised over handling refinement.
+
+**Dependent Suspension, Critical Property** (key box)
+When one wheel rises over a bump the solid axle tilts, forcing the opposite wheel to change camber. Both wheels are always kinematically coupled.
+
+#### 2.2 Independent Suspension
+
+In an independent arrangement each wheel is connected to the body through its own linkage. A bump experienced by one wheel does not change the kinematics of the opposite wheel. This allows each tyre to maintain optimal contact with the road surface independently, improving grip, ride comfort, and handling. Independent suspensions are more complex and expensive but are now standard on the front axles of virtually all passenger cars and on the rear axles of performance vehicles.
+
+**Independent Suspension, Critical Property** (key box)
+Each wheel has its own linkage to the body. A bump on one wheel has no kinematic effect on the opposite wheel.
+
+#### 2.3 Named Independent Suspension Systems
+
+Three named systems are examinable and must be distinguished by their geometry, typical application, and design trade offs.
+
+## Page 4
+
+##### 2.3.1 MacPherson Strut
+
+The MacPherson strut combines the spring and damper into a single telescoping strut that also acts as one of the suspension links, providing both the upper pivot and the load path. A single lower control arm (wishbone) locates the wheel laterally. Because the strut must be tall enough to provide the necessary travel, this design requires a certain body height and therefore packaging space in the engine bay. Its advantages are low cost, low part count, and straightforward assembly. Its principal disadvantages are limited adjustment of camber and caster, and the fact that the strut transmits all road forces directly into the top mount on the body, requiring a stiff local structure there. MacPherson struts are predominantly used on front axles of volume passenger cars.
+
+##### 2.3.2 Multilink Suspension
+
+A multilink suspension uses three or more control arms (links) per corner, each oriented to control a specific degree of freedom. The geometry can be tuned to achieve almost any desired camber, toe, and caster behaviour through the suspension travel, giving the suspension engineer very high freedom in setting kinematics. Multilink systems are used on both front and rear axles of premium and performance vehicles. Their principal drawbacks are mechanical complexity, high part count, and cost.
+
+##### 2.3.3 Double Wishbone (Double A Arm)
+
+Double wishbone suspension uses an upper and a lower A shaped (triangulated) control arm. This geometry provides good control of camber change through travel and a well defined instant centre. It is common on body on frame and performance vehicles. Compared with MacPherson, the double wishbone results in a heavier unsprung mass contribution from the upper arm, and requires more lateral packaging space. However, it allows independent tuning of the upper and lower pivot positions and is generally regarded as providing superior handling to MacPherson at the cost of complexity.
+
+**Named Suspension Systems Summary** (table, right edge of columns is clipped in the source PDF; reconstructed in full from the paragraph text above)
+
+| Type | Typical Application | Distinguishing Feature |
+|---|---|---|
+| MacPherson Strut | Front axle, volume cars | Spring and damper in a single strut; low cost, limited adjustment of camber and caster |
+| Multilink | Front and rear, premium and performance | Three or more links; very high adjustability; complex |
+| Double Wishbone | Body on frame vehicles, performance | Upper and lower A arm; less camber change; heavier unsprung mass |
+
+### 3 Sprung and Unsprung Mass
+
+The suspension spring separates the vehicle into two dynamic subsystems. The sprung mass comprises everything supported by the springs: the body, chassis, interior, engine, gearbox, and fuel. The unsprung mass comprises everything between the springs and the road: tyres, wheels, hubs, brake rotors, brake calipers, uprights (knuckles), and suspension links (partially, weighted by motion ratio).
+
+Reducing unsprung mass improves every major dynamic metric simultaneously. A lighter unsprung mass follows road undulations more quickly (lower natural frequency of the wheel hop mode), which improves tyre contact and therefore grip. This translates directly into shorter braking distances, higher cornering speeds, better acceleration traction, improved ride comfort, and reduced fuel consumption (less energy wasted in unsprung oscillation).
+
+#### 3.1 Unsprung Mass Accounting
+
+Components that move with the wheel fully (motion ratio = 1) contribute their full mass. Components attached to the body at one end (motion ratio < 1) contribute only a fraction of their mass, specifically:
+
+$$m_{\text{eff}} = m_{\text{component}} \times \left(\frac{a}{L}\right)^2 \tag{1}$$
+
+\begin{varlist}
+\vitem{m_{\text{eff}}}{effective unsprung mass contribution}{kg}
+\vitem{m_{\text{component}}}{actual mass of the component}{kg}
+\vitem{a/L}{motion ratio, the ratio of the component's displacement to the wheel's displacement at the relevant attachment point}{dimensionless}
+\end{varlist}
+
+where a/L is the motion ratio. The table below lists representative values for a typical formula style race car corner (continues on next page).
+
+## Page 5
+
+**Unsprung mass accounting table** (continues from page 4, equation 1 applied per component)
+
+| Component | Mass (kg) | Motion Ratio | Effective Unsprung (kg) |
+|---|---|---|---|
+| Knuckle / Upright | 7.0 | 1.00 | 7.000 |
+| Bearing | 4.0 | 1.00 | 4.000 |
+| Wheel | 15.0 | 1.00 | 15.000 |
+| Tyre | 20.0 | 1.00 | 20.000 |
+| Brake Caliper | 7.0 | 1.00 | 7.000 |
+| Brake Rotor | 12.0 | 1.00 | 12.000 |
+| Lower Control Arm | 4.0 | 0.33 | 1.320 |
+| Upper Control Arm | 2.5 | 0.33 | 0.825 |
+| Tie Rod | 1.5 | 0.50 | 0.750 |
+| Spring | 5.0 | 0.75 | 1.875 |
+| Damper | 8.0 | 0.75 | 4.020 |
+| Half-shaft | 20.0 | 0.50 | 10.000 |
+| **Total** | | | **83.8** |
+
+**Unsprung Mass, Total** (key box)
+For a representative single corner: total effective unsprung mass is approximately 83.8 kg. Reducing this value improves acceleration, braking, handling, ride comfort, and fuel consumption simultaneously.
+
+#### 3.2 Assembly Sub-Assemblies
+
+The wheel corner assembly divides into two conceptual sub assemblies:
+- Rotating sub assembly: wheel, braking components (rotor and caliper), and torque transmission components (half shaft, CV joints). These spin with the wheel.
+- Suspension sub assembly: strut or damper, upright/knuckle, wishbones or control arms, toe link, and all mounting brackets. These do not rotate but move vertically with bump/rebound travel.
+
+#### 3.3 Car Design Specifications (Examinable Reference Values)
+
+The following design specifications define the geometry of the vehicle used as the running example throughout the module: front to rear axle spacing 1600 mm; rear wheel centre plane spacing 1280 mm; four pneumatic tyres with 20 inch overall diameter on 13 inch rims; wheels with 3 to 5 lug holes.
+
+### 4 Wheel Rim Anatomy and Key Dimensions
+
+#### 4.1 Parts of a Wheel
+
+A cast or forged alloy wheel consists of the following named features. The spokes (also called the face or spider) are the structural members that transmit loads between the hub and the rim. The rim is the outer ring that the tyre bead seats against. The barrel is the cylindrical section of the rim that determines the interior width. Lug holes (or bolt holes) are the through holes through which the wheel is bolted to the hub. The centre cap covers the hub and lug nut area for cosmetic and aerodynamic purposes. The outer lip is the outermost visible edge of the rim. The valve stem is the port through which the tyre is inflated.
+
+Looking at the rim cross section from the tyre mounting perspective: the rim lip is the outermost edge; the bead rest (bead seat) is the tapered surface against which the tyre bead seals; the mounting hump (safety hump) is a raised ridge that prevents the tyre bead from dropping into the centre well under deflation; the drop centre is the recessed well that allows the tyre bead to be levered over the rim lip during mounting.
+
+#### 4.2 Key Wheel Dimensions
+
+**Pitch Circle Diameter (PCD), Definition** (definition box)
+The Pitch Circle Diameter (PCD) is the diameter of the imaginary circle that passes through the centre of each wheel mounting (lug) hole. It determines whether a wheel is compatible with a given hub and must be stated together with the number of lug holes, e.g. 5 by 114.3 mm.
+
+## Page 6
+
+Rim width is the internal width of the barrel, measured bead seat to bead seat. It determines the tyre section width that can be correctly fitted.
+
+Rim diameter is the diameter at the bead seat, measured in inches by automotive convention (e.g. 13 in, 17 in, 18 in).
+
+Wheel offset is the signed distance from the wheel's hub mounting face to the wheel centreline. A positive offset places the mounting face outboard of the centreline (wheel sits inward); a negative offset places it inboard (wheel protrudes outward). Offset must be stated in millimetres (e.g. ET +35).
+
+**Wheel Offset, Definition** (definition box)
+Offset (ET) = distance from the hub mounting face to the wheel centreline (positive: face is outboard of centreline; negative: face is inboard). Units: mm.
+
+#### 4.3 Spoke Function and Selection Factors
+
+The spokes must carry bending and shear forces arising from vertical load, braking torque, and lateral cornering forces. Spoke geometry selection depends on: wheel diameter, rim depth, number of lug holes, and flange size of the hub. A wider hub flange allows more spoke patterns and spreads load more effectively.
+
+#### 4.4 Lug (Mounting) Hole Patterns
+
+The number of lug holes determines how the PCD is measured physically. For a 4 lug or 8 lug pattern the PCD is measured as the distance between the centres of two directly opposite holes. For a 5 lug pattern no two holes are directly opposite, so the PCD is measured from the back edge of one hole to the centre of the second bolt hole away from it. For a 6 lug pattern the same centre to opposite centre method as for 4 lug applies.
+
+In motorsport, a single large central locking nut (knockoff) replaces the multi stud pattern; this allows extremely rapid wheel changes.
+
+#### 4.5 Lug Hole Seat Types
+
+The seat is the surface inside the lug hole that contacts the nut or bolt head and centres the wheel on the hub. Three seat types exist and the nut/bolt must match the seat type of the wheel:
+- Conical Seat (Tapered): a 60 degree taper. The most common type for steel wheels.
+- Spherical Seat (Ball Seat): a hemispherical recess. Common on some European alloy wheels.
+- Mag (Flat/Shank) Seat: a flat washer style seat with a small cylindrical shank. Used on magnesium and some aluminium racing wheels.
+
+#### 4.6 Wheel Construction Types
+
+1 piece wheels are cast or forged as a single unit. They are the simplest, lowest cost construction, but rim width and offset are fixed at manufacture.
+
+2 piece wheels consist of a separately manufactured centre piece (face/spider) bolted or welded to a separate rim barrel. This allows the centre to be forged (for strength) while the rim is spun or rolled, and permits different offsets to be achieved by varying the centre to rim junction.
+
+3 piece wheels divide the rim barrel itself into inner and outer halves bolted to a centre section. This gives the greatest dimensional flexibility: barrel width can be varied simply by using spacers at the inner/outer barrel junction, enabling bespoke offsets and widths without re tooling.
+
+### 5 Rim Materials
+
+#### 5.1 Steel
+
+Steel rims are durable, inexpensive, and repairable (they can be bent back to shape after minor impacts). The principal disadvantage is high density: a steel wheel is significantly heavier than an equivalent aluminium wheel, with negative consequences for fuel economy and unsprung mass. Steel rims are common on commercial vehicles and as winter/spare wheels. Common grades include low carbon sheet (ASTM A1008/A1008M), medium carbon (SAE 1040/1050), high strength low alloy steel (ASTM A572/A656), dual phase steels (DP500, DP600), and boron steels (22MnB5, 27MnCrB5-2).
+
+## Page 7
+
+#### 5.2 Aluminium Alloys
+
+Aluminium alloy wheels are lighter than steel, improve fuel economy and handling through reduced unsprung mass, and dissipate brake heat more effectively. They are more expensive and more susceptible to cracking under kerb strikes or fatigue than steel. The examinable aluminium alloy families and their key characteristics are:
+
+**Aluminium alloy families table**
+
+| Alloy | Alloying Elements | Key Properties |
+|---|---|---|
+| 6061 | Mg + Si | Excellent strength to weight; good corrosion resistance; good machinability |
+| 6063 | Mg + Si | Good extrudability; medium strength; smooth surface finish |
+| 7075 | Zn + Cu | High strength (especially heat treated); excellent fatigue resistance; low corrosion resistance |
+| 5083 | Mg | Excellent marine corrosion resistance; good weldability; moderate strength |
+| 6016 | Si + Mn | Good formability; high strength; good corrosion resistance |
+
+**Aluminium Alloy Families, Exam Key Points** (key box)
+6061: Mg+Si, best all round. 7075: Zn+Cu, highest strength and fatigue resistance, poor corrosion. 5083: Mg, best corrosion/welding (marine). 6063: Mg+Si, extrusions. 6016: Si+Mn, high strength plus formability.
+
+#### 5.3 Magnesium Alloys
+
+Magnesium alloys are lighter than aluminium (density approximately 1.74 g/cm cubed vs 2.70 g/cm cubed) with a competitive strength to weight ratio. They are used in high performance motorsport applications. Disadvantages include higher cost, more difficult manufacturing, and susceptibility to corrosion. Examinable grades: AZ91, AM50, WE43, AE44.
+
+#### 5.4 Carbon Fibre Reinforced Polymer (CFRP)
+
+Carbon fibre wheels are extremely lightweight with excellent specific strength and stiffness, and they attenuate high frequency vibrations better than metals. However, they are extremely expensive (wheels can exceed £10,000 per set), prone to delamination or catastrophic fracture on kerb strikes, difficult to repair, and require complex autoclave manufacturing with variable material consistency. Three layup types are examinable:
+- Unidirectional (UD): all fibres aligned in one direction. Highest strength along the fibre axis. Used in spokes where principal loads are known.
+- 2D Plain Weave: fibres woven at 0/90 degrees. Balanced biaxial properties. Used in general structural sections of the rim.
+- Twill Weave: fibres woven in a diagonal (2/2 or similar) pattern. Slightly lower stiffness than plain weave but better drapability and distinctive aesthetic. Used on the visible outer rim surfaces.
+
+### 6 Rim Manufacturing Processes
+
+#### 6.1 Pressed Sheet Metal and Roll Forming
+
+Steel rims are typically manufactured from flat sheet stock that is pressed into shape and then roll formed into the barrel profile. This is a high volume, low cost process but limits design freedom: complex spoke geometries cannot be produced this way, and the resulting rims are heavier than cast or forged equivalents.
+
+#### 6.2 Alloy Wheel Forging
+
+Forging starts with a solid billet of aluminium alloy. The billet is heated and formed under very high pressure (either open die or closed die). The applied pressure aligns the grain structure of the metal with the geometry of the part, producing a part with no porosity and superior mechanical properties compared to casting. After forging, the near net shape blank is CNC machined to final dimensions. Forged wheels are stronger and lighter than cast equivalents for the same design but are more expensive due to tooling and machining costs.
+
+## Page 8
+
+#### 6.3 Casting
+
+In casting, molten aluminium (or magnesium) alloy is poured or injected into a mould and allowed to solidify. Gravity casting, low pressure die casting (LPDC), and high pressure die casting (HPDC) are all used. The main process risk is porosity: gas trapped during solidification creates voids that act as stress concentrators. Post processing (heat treatment, X ray inspection, hot isostatic pressing) is required to control this risk. Casting allows complex geometries at relatively low tooling cost for high volumes.
+
+#### 6.4 CNC Machining
+
+CNC machining removes material from a pre formed blank (cast or forged billet) to achieve very tight dimensional tolerances and highly detailed spoke and surface geometries. It is used for bespoke or low volume production and for final finishing of forged blanks. Disadvantages: high cost per part, long cycle times, significant tool wear, and limited production rate.
+
+#### 6.5 Carbon Fibre Composite Manufacturing
+
+CF wheels are laid up from prepreg sheets in a mould and cured in an autoclave under heat and pressure. The process allows intricate geometries, but autoclave time is long, material costs are high, and surface finish requires post processing. Material consistency can vary between batches. Damage inspection requires specialised equipment (ultrasound, X ray), and damage repair is often not practicable, a damaged CF wheel is typically replaced entirely.
+
+#### 6.6 Finishing Processes
+
+Chrome plating deposits a thin layer of chromium onto the substrate by electroplating. It gives a highly reflective, classic appearance but is susceptible to pitting and corrosion if the plating is scratched, because the exposed substrate beneath corrodes preferentially.
+
+Powder coating applies a dry powder electrostatically to the wheel surface, which is then cured in an oven. The result is a thick, durable, uniform film that resists chipping and UV degradation better than liquid paint. It is the dominant finishing process for alloy wheels.
+
+### 7 Wheel Mounting: Fasteners and Standards
+
+#### 7.1 Wheel Nuts vs Wheel Bolts
+
+Two systems are used to mount wheels to hubs. In the lug nut system (common in North America and Japan) the hub carries threaded studs; the wheel slides over the studs and nuts are tightened onto them. In the lug bolt (wheel bolt) system (common in Europe, especially German manufacturers) the hub has no studs; instead, bolts are inserted through the wheel and screwed directly into tapped holes in the hub flange. Both systems are functionally equivalent when correctly specified, but parts are not interchangeable.
+
+#### 7.2 Thread Specification Notation
+
+A full metric thread specification encodes all necessary parameters in a standardised string. Taking the example M16 x 1.5, dash, 5g6g LH:
+
+**Thread specification symbol table**
+
+| Symbol | Meaning |
+|---|---|
+| M | Metric thread form |
+| 16 | Nominal (major) diameter, mm |
+| 1.5 | Thread pitch, mm (distance between adjacent thread crests) |
+| 5g | Tolerance class for the pitch diameter |
+| 6g | Tolerance class for the major diameter (external thread) |
+| LH | Left hand thread (absent implies right hand) |
+
+For an internal thread the tolerance designator uses uppercase letters, e.g. M16 x 1.5, dash, 6H (6H = standard tolerance for internal thread pitch diameter).
+
+## Page 9
+
+**Metric Thread Notation** (key box)
+M16 x 1.5, dash, 5g6g LH: M = metric; 16 = major diameter (mm); 1.5 = pitch (mm); 5g6g = tolerance class (lower case = external); LH = left hand. Internal: uppercase, e.g. 6H.
+
+#### 7.3 Bolt Grade Designations
+
+Metric bolt grades (property classes) follow the ISO/BS convention in which the grade number encodes minimum tensile strength. The first number multiplied by 100 gives the minimum ultimate tensile strength in MPa; the product of both numbers multiplied by 10 gives the minimum proof (yield) stress.
+
+**Bolt grade table**
+
+| ISO Class | Min UTS (MPa) | Approximate AISI Steel | SAE/ASTM Equivalent |
+|---|---|---|---|
+| 8.8 | 800 | AISI 4140 or AISI 1045 (medium carbon) | SAE J429 Grade 5; ASTM A449 |
+| 10.9 | 1000 | AISI 4340 (alloy steel) | SAE J429 Grade 8; ASTM A354 BD |
+| 12.9 | 1200 | AISI 4340 or 4140 (heat treated) | No direct equivalent (specify 1200 MPa minimum tensile strength directly) |
+
+**Bolt Grade Key Facts** (key box)
+Class 8.8: 800 MPa min UTS, approximately SAE Grade 5. Class 10.9: 1000 MPa, approximately SAE Grade 8. Class 12.9: 1200 MPa, no direct imperial equivalent.
+
+#### 7.4 Relevant Standards
+
+The principal standards bodies and their scope relevant to this module are: ISO (International Organisation for Standardisation, global); BS (British Standard); AISI (American Iron and Steel Institute, material grades); SAE (Society of Automotive Engineers, vehicle and fastener standards); ASTM (American Society for Testing and Materials, materials testing); DIN (German national standard, Deutsches Institut fur Normung); JIS (Japanese Industrial Standards).
+
+Specific standards cited in this module: BS ISO 15072:2012 (hexagon bolts with flange, metric fine pitch thread); BS EN ISO 898-1:2013 (mechanical properties of fasteners made of carbon and alloy steel); BS EN ISO 225:2010 (fasteners, symbols and descriptions of dimensions).
+
+### 8 Tyres
+
+#### 8.1 Tyre Structure
+
+A pneumatic tyre consists of multiple bonded layers, listed from the outermost to the innermost: (1) Tread, the rubber compound in contact with the road, providing grip and wear resistance; (2) Belt 2 (outer steel belt); (3) Belt 1 (inner steel belt), two crossed steel cord belts that stabilise the tread and resist puncture; (4) Body Ply 2 (outer carcass ply); (5) Body Ply 1 (inner carcass ply), radial cords of nylon, polyester, or aramid that give the tyre its structural strength; (6) Innerliner, an air impermeable rubber layer that replaces the inner tube in tubeless tyres; (7) Bead Filler, a rubber apex that stiffens the lower sidewall; (8) Bead, high tensile steel wire bundles that anchor the tyre to the rim. The sidewall is a rubber layer on each side protecting the carcass plies between the bead and the tread.
+
+#### 8.2 Tyre Marking and Dimensions
+
+The tyre sidewall marking encodes all key dimensional and performance parameters. For example, the marking 195/55 R16 87V is decoded as follows:
+
+**Tyre marking decode table**
+
+| Code element | Value | Meaning |
+|---|---|---|
+| 195 | 195 | Section width, mm |
+| 55 | 55 | Aspect ratio (%) |
+| R | (radial) | Radial construction |
+| 16 | 16 | Nominal rim diameter, inches |
+| 87 | 87 | Load index (maximum load per tyre) |
+| V | V | Speed rating (up to 240 km/h) |
+
+## Page 10
+
+**Tyre Aspect Ratio, Definition** (definition box)
+
+$$\text{Aspect Ratio} = \frac{\text{Section Height}}{\text{Section Width}} \times 100\% \tag{2}$$
+
+\begin{varlist}
+\vitem{\text{Aspect Ratio}}{ratio of tyre section height to section width}{\%}
+\vitem{\text{Section Height}}{height of the tyre sidewall from rim to tread}{mm}
+\vitem{\text{Section Width}}{widest point of the tyre cross section}{mm}
+\end{varlist}
+
+For a 195/55 tyre: section height = 0.55 times 195 = 107.25 mm.
+
+Other key tyre dimensions: overall diameter = nominal rim diameter plus 2 times section height; section width (actual moulded width) is greater than or equal to the tyre marking width; tread width (width of rubber in contact with road) is less than section width; rim width = the internal rim barrel width, which must match the tyre's permissible rim width range.
+
+#### 8.3 Tyre Profile Considerations
+
+Low profile tyres (low aspect ratio, e.g. 35 to 50) are common in sports cars. They provide more precise steering response and better lateral cornering performance because the sidewall deflects less under lateral load. However, they transmit road surface irregularities more directly to the chassis, increasing cabin noise and harshness.
+
+High profile tyres (high aspect ratio, e.g. 70 to 80) provide better shock absorption and are used on trucks and large passenger vehicles. The tall sidewall absorbs road shocks but introduces more tyre deflection and wrinkling under cornering loads.
+
+Wide tyres present a larger contact patch to the road, allowing higher tangential friction forces. This increases maximum tractive force and braking force but also increases rolling resistance and aquaplaning risk in wet conditions.
+
+Narrow tyres have less rolling resistance and better hydrodynamic water evacuation, making them more suitable for wet or icy conditions. They are less capable of generating high lateral forces.
+
+#### 8.4 Motorsport Tyres
+
+Slick tyres have no tread pattern. Removing the tread grooves maximises the rubber contact area with the road, producing the highest possible grip on dry tarmac. They are used exclusively in dry conditions; any standing water causes immediate aquaplaning because there is no mechanism for water evacuation.
+
+Wet (rain) tyres have deep circumferential and lateral grooves designed to evacuate water from the contact patch at high vehicle speeds. This maintains rubber to road contact through the hydrodynamic film and provides grip on wet surfaces. They cannot be used on dry tracks because the reduced rubber contact area and softer compound generate excessive heat.
+
+#### 8.5 Tyre Fitting
+
+Fitting a tyre onto a rim requires pushing the tyre bead past the mounting hump and into the drop centre to allow the opposite bead to be levered over the rim lip. Tyre fitting requires tyre lubricant (soap solution) applied to the bead and is performed with a tyre mounting machine. Incorrect fitting can damage the bead wire and create an unsafe installation.
+
+### 9 Road Contact and Tyre Forces
+
+#### 9.1 Contact Patch
+
+When a pneumatic tyre supports a vehicle load, the tyre carcass deforms and a finite area of rubber contacts the road. This area is the contact patch (or footprint). Its size and shape depend on tyre inflation pressure, applied load, and tyre construction. For most analytical purposes in this module the contact patch is idealised as a single point load acting at the centre of the patch at road level.
+
+#### 9.2 Friction Coefficient
+
+The friction coefficient between a tyre and the road surface, mu, is not a simple material constant. It is highly dependent on tyre compound, tread pattern, road surface texture, temperature, speed, and presence of contaminants (water, oil, rubber debris). Values must be obtained from direct tyre performance testing. The range encountered in automotive contexts spans approximately mu equals 0.05 (wet ice, worn tyre) to mu equals 2 (racing slick on dry abrasive tarmac at optimal temperature).
+
+## Page 11
+
+**Tyre Friction Coefficient, Range** (key box)
+The tyre road friction coefficient mu is experimentally determined. Typical range: mu approximately 0.05 (wet ice) to mu approximately 2 (racing slick, dry). No single tabulated value is reliable; always use data from tyre performance testing.
+
+#### 9.3 Forces at the Wheel
+
+The complete set of forces acting at the wheel corner can be resolved into the following components. At the contact patch:
+- $F_w$, vertical reaction force (normal force from road, equal and opposite to the share of vehicle weight supported by this corner plus dynamic load transfer contributions).
+- $F_T$, tangential (tractive) friction force, acting horizontally in the plane of the road in the direction of travel. This is the force that propels the vehicle under acceleration or decelerates it under braking.
+- $F_{si}$, lateral force(s), acting horizontally perpendicular to the direction of travel. Generated during cornering. May also include aligning torque components.
+
+Additionally, braking generates a torque $\tau_r$ at the wheel (from the brake rotor and caliper), which must be reacted by the suspension links. Acceleration forces (from the drivetrain) act at the wheel centre (hub), not at the contact patch, and must be distinguished in free body diagrams.
+
+\begin{varlist}
+\vitem{F_w}{vertical reaction (normal) force from the road}{N}
+\vitem{F_T}{tangential friction (tractive) force at the contact patch}{N}
+\vitem{F_{si}}{lateral force(s) at the contact patch during cornering}{N}
+\vitem{\tau_r}{braking torque at the wheel}{N\,m}
+\end{varlist}
+
+**Forces at the Contact Patch, Summary** (key box)
+$F_w$: vertical reaction (normal) force from road. $F_T$: tangential friction (tractive) force, braking/propulsion. $F_{si}$: lateral force(s), cornering. $\tau_r$: braking torque at wheel. Note: acceleration (drivetrain) forces act at the wheel centre, not the contact patch.
+
+### 10 Worked Example: Wheel Modelling and Design Decisions
+
+This section consolidates the design reasoning content from the Activity Slides (Modelling Your Wheels). It is a qualitative worked example, no numerical calculation is given in the source.
+
+The wheel assembly cannot be designed in isolation. Wheel dimensions are the primary constraint that cascades through the entire suspension corner design in the following sequence: the wheel envelope (outer diameter and rim diameter) determines the maximum size of the brake disc and brake caliper that can fit within the wheel; the brake disc diameter then determines the minimum hub diameter needed to mount it; the hub diameter and the expected bearing loads together determine the required bearing specification (bore, dynamic load rating C, static load rating C0). Consequently, a change to the wheel specification (e.g. increasing rim diameter by 1 inch) may require redesigning the brake package, hub, and bearing, making early wheel selection critical to the design process.
+
+**Wheel Dimension Cascade** (key box)
+Wheel envelope leads to max brake disc plus caliper size, leads to hub diameter, leads to bearing selection. Fixing wheel dimensions early is critical because they constrain all downstream component choices.
+
+<!-- EXTRACTION COMPLETE: 11 pages -->
