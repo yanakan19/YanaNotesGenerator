@@ -89,7 +89,7 @@ Seven stages, each writing to disk before the next, so an interrupted run resume
 
 1. **Inventory** `sources/` by upload time and classify each file.
 2. **Render** each PDF to page images at 150 DPI (`pages-cache/`).
-3. **Vision extract**, five to six pages per batch, appending to `extraction/<file>.md` after every batch. A file stamped `EXTRACTION COMPLETE` is never read again, so no page is ever vision read twice.
+3. **Vision extract**, fanned out one subagent per unfinished source file so the orchestrator's own context stays flat regardless of week size, four to five pages per batch per subagent, appending to `extraction/<file>.md` after every batch. A file stamped `EXTRACTION COMPLETE` is never read again, so no page is ever vision read twice.
 4. **Crop** crucial diagrams from the original page at 300 DPI (`figures/`).
 5. **Draft** the master markdown from the extractions (the tutor recall source).
 6. **Transform** to LaTeX on the shared style and **compile** twice with `pdflatex`.
