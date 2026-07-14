@@ -1,8 +1,8 @@
-# yana-notes-generator
+# YanaNotesGenerator
 
 Turn a folder of lecture slides, worksheets, solutions and revision decks into **compact, complete, uniformly formatted LaTeX study notes**, one command, every module, every week.
 
-`/yana-notes-generator` reads every page as an image, crops the diagrams that matter straight from the originals, drafts a master markdown it can later answer questions from, and compiles a print ready PDF. Formatting is identical across every document because it all comes from one shared style file, so a tweak there restyles every week of every module on recompile.
+`/YanaNotesGenerator` reads every page as an image, crops the diagrams that matter straight from the originals, drafts a master markdown it can later answer questions from, and compiles a print ready PDF. Formatting is identical across every document because it all comes from one shared style file, so a tweak there restyles every week of every module on recompile.
 
 > **Visual walkthrough of the pipeline:** open [`docs/how-it-works.html`](docs/how-it-works.html) in a browser.
 > **Which model to run it on:** see [`docs/MODEL.md`](docs/MODEL.md) (short answer: Claude Sonnet with thinking on).
@@ -15,7 +15,7 @@ Turn a folder of lecture slides, worksheets, solutions and revision decks into *
 
 1. Drop the week's files into `ES327/Week 05/sources/`, **in the order they were delivered** (Part 1 before Part 2, revision deck last; the pipeline reads files by upload time).
 2. Open a fresh chat in that module's Cowork project.
-3. Run `/yana-notes-generator Week 5`.
+3. Run `/YanaNotesGenerator Week 5`.
 
 It runs on its own to a compiled PDF, commits, and pushes. Then ask it anything from the week in the same chat.
 
@@ -42,8 +42,8 @@ The PDF always has: a title block, a one page contents, lecture content in deliv
 ## Repository layout
 
 ```
-yana-notes-generator/
-├── .claude/commands/yana-notes-generator.md   # the command itself
+YanaNotesGenerator/
+├── .claude/commands/YanaNotesGenerator.md   # the command itself
 ├── templates/
 │   ├── uninotes.sty            # ALL shared styling lives here (single source of uniformity)
 │   ├── week_template.tex       # skeleton each week's .tex is built from
@@ -73,7 +73,7 @@ The one command routes on what you give it:
 
 | Say | It does |
 | --- | --- |
-| `/yana-notes-generator Week 5` | **GENERATE** the week's notes end to end (the default). |
+| `/YanaNotesGenerator Week 5` | **GENERATE** the week's notes end to end (the default). |
 | `explain mode superposition` / `quiz me on week 3` | **TUTOR** from the master markdown only, never re-reading a PDF, so recall is near free. |
 | upload a worksheet + solutions after notes exist | **WORKSHEET**: fold each solved problem into that week's Worked Examples, then recompile. |
 | `set up module ES327 Design of Mechanical Systems` | **NEW MODULE**: scaffold `module.md` and a folder per teaching week. |
@@ -125,13 +125,13 @@ Prerequisites: **MiKTeX** (provides `pdflatex` and `pdftoppm`), **Git**, and opt
 
 1. **Clone** onto a machine:
    ```powershell
-   git clone https://github.com/yanakan19/yana-notes-generator.git C:\Users\mryx1\repos\yana-notes-generator
+   git clone https://github.com/yanakan19/YanaNotesGenerator.git C:\Users\mryx1\repos\YanaNotesGenerator
    ```
-   The command uses absolute paths under `C:\Users\mryx1\repos\yana-notes-generator`; clone there, or update the paths in `.claude/commands/yana-notes-generator.md` and `docs/MODEL.md` if you clone elsewhere.
+   The command uses absolute paths under `C:\Users\mryx1\repos\YanaNotesGenerator`; clone there, or update the paths in `.claude/commands/YanaNotesGenerator.md` and `docs/MODEL.md` if you clone elsewhere.
 
 2. **Make the command global** so it works in any session, not just this repo:
    ```powershell
-   Copy-Item ".\.claude\commands\yana-notes-generator.md" "$env:USERPROFILE\.claude\commands\yana-notes-generator.md" -Force
+   Copy-Item ".\.claude\commands\YanaNotesGenerator.md" "$env:USERPROFILE\.claude\commands\YanaNotesGenerator.md" -Force
    ```
 
 3. **Enable MiKTeX auto install** of missing packages (first compile pulls a few):
@@ -139,25 +139,25 @@ Prerequisites: **MiKTeX** (provides `pdflatex` and `pdftoppm`), **Git**, and opt
    initexmf --set-config-value="[MPM]AutoInstall=1"
    ```
 
-4. **Scaffold your first module** in a chat: `/yana-notes-generator set up module ES327 Design of Mechanical Systems`.
+4. **Scaffold your first module** in a chat: `/YanaNotesGenerator set up module ES327 Design of Mechanical Systems`.
 
 ### Cowork setup (once per module)
 
 1. New Cowork project, named after the module.
-2. Point its folder at `C:\Users\mryx1\repos\yana-notes-generator\<MODULE CODE>` (or the repo root for one project across all modules).
+2. Point its folder at `C:\Users\mryx1\repos\YanaNotesGenerator\<MODULE CODE>` (or the repo root for one project across all modules).
 3. Because the command is installed globally, it is available in every chat there.
 
 ### GitHub
 
-This repo is `yana-notes-generator` under the `yanakan19` account. To connect a fresh clone:
+This repo is `YanaNotesGenerator` under the `yanakan19` account. To connect a fresh clone:
 
 ```powershell
 gh auth login          # browser login, GitHub.com + HTTPS
-git remote add origin https://github.com/yanakan19/yana-notes-generator.git
+git remote add origin https://github.com/yanakan19/YanaNotesGenerator.git
 git push -u origin main
 ```
 
-After that the command pushes automatically at the end of every generation run; force one any time with `/yana-notes-generator sync`.
+After that the command pushes automatically at the end of every generation run; force one any time with `/YanaNotesGenerator sync`.
 
 ---
 
@@ -166,8 +166,8 @@ After that the command pushes automatically at the end of every generation run; 
 Rarely needed (the command does it), but if you want to:
 
 ```powershell
-Set-Location "C:\Users\mryx1\repos\yana-notes-generator\<MODULE>\Week NN"
-$env:TEXINPUTS = ".;C:\Users\mryx1\repos\yana-notes-generator\templates;"
+Set-Location "C:\Users\mryx1\repos\YanaNotesGenerator\<MODULE>\Week NN"
+$env:TEXINPUTS = ".;C:\Users\mryx1\repos\YanaNotesGenerator\templates;"
 pdflatex -interaction=nonstopmode <CODE>_WeekNN_Notes.tex   # run twice
 ```
 

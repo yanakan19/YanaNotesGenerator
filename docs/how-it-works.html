@@ -1,4 +1,4 @@
-<title>yana-notes-generator — how the pipeline runs</title>
+<title>YanaNotesGenerator — how the pipeline runs</title>
 <style>
   :root {
     --paper: #fbfbf8;
@@ -188,7 +188,7 @@
 <div class="wrap">
   <header class="hero">
     <p class="eyebrow">University notes engine · build pipeline</p>
-    <h1><span class="slash">/</span>yana-notes-generator</h1>
+    <h1><span class="slash">/</span>YanaNotesGenerator</h1>
     <p class="lede">One command turns a folder of lecture slides, worksheets and revision decks into compact, complete, uniformly formatted LaTeX notes. It reads every page as an image, crops the diagrams that matter, drafts a master markdown it can answer questions from later, and compiles a print ready PDF. This is how a run flows.</p>
     <div class="meta-row">
       <span class="chip"><b>Input</b> &nbsp;PDF slides, worksheets, solutions</span>
@@ -314,7 +314,7 @@ pdflatex <span class="tok-flag">-interaction=nonstopmode</span> CODE_WeekNN_Note
     <p class="sec-sub">One Cowork project per module, one chat per week.</p>
     <ol class="routine">
       <li><span>Drop the week's files into <code class="inline">Week NN/sources/</code>, uploaded <b>in delivery order</b>.</span></li>
-      <li><span>Start a fresh chat and run <code class="inline">/yana-notes-generator Week&nbsp;NN</code>. It runs to a compiled PDF on its own.</span></li>
+      <li><span>Start a fresh chat and run <code class="inline">/YanaNotesGenerator Week&nbsp;NN</code>. It runs to a compiled PDF on its own.</span></li>
       <li><span>Ask follow up questions in the same chat all week; tutor mode recalls from the markdown.</span></li>
       <li><span>Next week, new chat. Old chats are safe to delete: everything lasting lives in the repo and on GitHub.</span></li>
     </ol>
@@ -334,6 +334,6 @@ pdflatex <span class="tok-flag">-interaction=nonstopmode</span> CODE_WeekNN_Note
   </div>
 
   <footer>
-    yana-notes-generator · /yana-notes-generator · shared style in templates/uninotes.sty · model guidance in docs/MODEL.md
+    YanaNotesGenerator · /YanaNotesGenerator · shared style in templates/uninotes.sty · model guidance in docs/MODEL.md
   </footer>
 </div>
