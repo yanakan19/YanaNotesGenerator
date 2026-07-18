@@ -8,7 +8,7 @@ from pathlib import Path
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
 
-from .config import APP_NAME, APP_ORG, deployment, settings
+from .config import AUTH_ENABLED, APP_NAME, APP_ORG, deployment, settings
 from .theme import ThemeManager, ThemeMode
 from .ui import MainWindow
 
@@ -35,8 +35,9 @@ def main() -> int:
     theme.apply()
 
     # First run: if there is no Supabase connection yet, ask for one before
-    # showing the app so login can actually work.
-    if not deployment.configured:
+    # showing the app so login can actually work. Skipped while AUTH_ENABLED
+    # is off, since the app doesn't need Supabase to run in that mode.
+    if AUTH_ENABLED and not deployment.configured:
         from .ui.pages import ConnectionDialog
 
         ConnectionDialog().exec()

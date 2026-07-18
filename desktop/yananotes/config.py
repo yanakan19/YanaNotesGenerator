@@ -20,6 +20,12 @@ from PySide6.QtCore import QSettings, QStandardPaths
 APP_NAME = "YanaNotes"
 APP_ORG = "Yanakan"
 
+# Set to True once Supabase email delivery (SMTP + the OTP template) is
+# confirmed working end to end. While False the app skips straight to the
+# library on launch: no email, no code, no licence check. All the auth code
+# stays in place underneath this flag so re-enabling it is a one line change.
+AUTH_ENABLED = False
+
 
 def _config_dir() -> Path:
     base = QStandardPaths.writableLocation(

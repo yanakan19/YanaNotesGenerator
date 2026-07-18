@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
 
 from ..async_task import run_async
 from ..auth import AuthError, AuthService, LicenseStatus, session as session_store
-from ..config import settings
+from ..config import AUTH_ENABLED, settings
 from ..library import NoteFile
 from ..theme import ThemeManager, ThemeMode
 from .pages import (
@@ -59,7 +59,10 @@ class MainWindow(QMainWindow):
         self._stack.add(self._pending)
         self._stack.add(self._shell)
 
-        self._try_restore()
+        if AUTH_ENABLED:
+            self._try_restore()
+        else:
+            self._enter_local_mode()
 
     # -- construction -----------------------------------------------------
     def _build_auth_pages(self) -> None:
@@ -153,6 +156,14 @@ class MainWindow(QMainWindow):
         QDesktopServices.openUrl(QUrl.fromLocalFile(str(note.path)))
 
     # -- auth flow --------------------------------------------------------
+    def _enter_local_mode(self) -> None:
+        """AUTH_ENABLED is off: skip login entirely, run fully locally."""
+        self._email = ""
+        self._settings.set_account("")
+        self._library.reload()
+        self._go_library()
+        self._stack.show_page(self._shell)
+
     def _try_restore(self) -> None:
         stored = session_store.load()
         if stored is None:
@@ -240,6 +251,9 @@ class MainWindow(QMainWindow):
         self._stack.show_page(self._shell)
 
     def _logout(self) -> None:
+        if not AUTH_ENABLED:
+            self._toast.show_message("Login is disabled in this build.")
+            return
         run_async(self._auth.sign_out, on_ok=lambda _r: None, on_error=lambda _m: None)
         session_store.clear()
         self._email = ""

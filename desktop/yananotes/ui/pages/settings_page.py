@@ -18,7 +18,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from ...config import deployment, settings
+from ...config import AUTH_ENABLED, deployment, settings
 from ...integrations import gdrive
 from ...theme import ThemeMode
 from ..widgets import Button, Card, heading, muted
@@ -250,13 +250,21 @@ class SettingsPage(QWidget):
         body.addWidget(heading("Account", "h2"))
         self.account_label = muted("")
         body.addWidget(self.account_label)
-        logout_btn = Button("Sign out", role="danger")
-        logout_btn.clicked.connect(self.logout.emit)
-        body.addWidget(logout_btn, alignment=Qt.AlignmentFlag.AlignLeft)
+        if AUTH_ENABLED:
+            logout_btn = Button("Sign out", role="danger")
+            logout_btn.clicked.connect(self.logout.emit)
+            body.addWidget(logout_btn, alignment=Qt.AlignmentFlag.AlignLeft)
+        else:
+            self.account_label.setText(
+                "Login is turned off for this build. The app runs fully "
+                "locally on this device; nothing is sent to Supabase."
+            )
         return card
 
     # -- helpers ----------------------------------------------------------
     def set_account(self, email: str) -> None:
+        if not AUTH_ENABLED:
+            return  # account card already shows the fixed "disabled" note
         self.account_label.setText(f"Signed in as {email}")
 
     def _sync_from_settings(self) -> None:
