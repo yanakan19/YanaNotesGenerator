@@ -47,6 +47,10 @@ class AuthService:
     def __init__(self) -> None:
         self._client = None
 
+    def reset(self) -> None:
+        """Drop the cached client so a changed connection takes effect."""
+        self._client = None
+
     # -- client lifecycle -------------------------------------------------
     def _get_client(self):
         if self._client is not None:

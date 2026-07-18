@@ -18,10 +18,11 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from ...config import settings
+from ...config import deployment, settings
 from ...integrations import gdrive
 from ...theme import ThemeMode
 from ..widgets import Button, Card, heading, muted
+from .config_dialog import ConnectionDialog
 
 
 class RepositoryChangeDialog(QDialog):
@@ -91,6 +92,7 @@ class RepositoryChangeDialog(QDialog):
 class SettingsPage(QWidget):
     theme_changed = Signal(str)  # ThemeMode value
     repository_changed = Signal()
+    connection_changed = Signal()
     logout = Signal()
     toast = Signal(str)
 
@@ -103,6 +105,7 @@ class SettingsPage(QWidget):
 
         root.addWidget(self._appearance_card())
         root.addWidget(self._repository_card())
+        root.addWidget(self._connection_card())
         root.addWidget(self._integrations_card())
         root.addWidget(self._account_card())
         root.addStretch(1)
@@ -191,6 +194,29 @@ class SettingsPage(QWidget):
                     item.unlink(missing_ok=True)
         # "disconnect" and "fresh" need no file operations.
 
+    # -- connection -------------------------------------------------------
+    def _connection_card(self) -> Card:
+        card = Card()
+        body = card.body()
+        body.addWidget(heading("Connection (Supabase)", "h2"))
+        body.addWidget(muted("The backend that handles login and licences."))
+        row = QHBoxLayout()
+        self.conn_label = QLabel("")
+        self.conn_label.setWordWrap(True)
+        row.addWidget(self.conn_label, 1)
+        edit = Button("Edit connection...", role="ghost")
+        edit.clicked.connect(self._edit_connection)
+        row.addWidget(edit)
+        body.addLayout(row)
+        return card
+
+    def _edit_connection(self) -> None:
+        dialog = ConnectionDialog(self)
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            self._sync_from_settings()
+            self.connection_changed.emit()
+            self.toast.emit("Connection saved. Sign in to continue.")
+
     # -- integrations -----------------------------------------------------
     def _integrations_card(self) -> Card:
         card = Card()
@@ -241,3 +267,8 @@ class SettingsPage(QWidget):
             self.theme_combo.blockSignals(False)
         repo = settings.repository()
         self.repo_label.setText(repo if repo else "No repository set.")
+        if hasattr(self, "conn_label"):
+            if deployment.configured:
+                self.conn_label.setText(f"Connected to {deployment.supabase_url}")
+            else:
+                self.conn_label.setText("Not connected. Add your Supabase project.")

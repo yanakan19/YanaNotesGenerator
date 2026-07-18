@@ -1,0 +1,40 @@
+-- Wire new licence requests to the notify-license-request edge function so you
+-- get an email the moment someone signs up. Run AFTER deploying the function.
+--
+-- Two ways to do this; pick one.
+--
+-- OPTION A (recommended): Database Webhook via the dashboard.
+--   Database -> Webhooks -> Create a new hook
+--     Table:   public.licenses
+--     Events:  Insert
+--     Type:    Supabase Edge Functions
+--     Function: notify-license-request
+--   That is it; the dashboard manages the trigger for you.
+--
+-- OPTION B: call the function directly from Postgres with pg_net.
+-- Replace <PROJECT_REF> and <ANON_OR_SERVICE_KEY> below.
+
+-- create extension if not exists pg_net;
+--
+-- create or replace function public.on_license_insert()
+-- returns trigger language plpgsql security definer as $$
+-- begin
+--   perform net.http_post(
+--     url     := 'https://<PROJECT_REF>.functions.supabase.co/notify-license-request',
+--     headers := jsonb_build_object(
+--       'Content-Type', 'application/json',
+--       'Authorization', 'Bearer <ANON_OR_SERVICE_KEY>'
+--     ),
+--     body    := jsonb_build_object(
+--       'type', 'INSERT', 'table', 'licenses',
+--       'record', to_jsonb(new)
+--     )
+--   );
+--   return new;
+-- end;
+-- $$;
+--
+-- drop trigger if exists trg_on_license_insert on public.licenses;
+-- create trigger trg_on_license_insert
+--   after insert on public.licenses
+--   for each row execute function public.on_license_insert();

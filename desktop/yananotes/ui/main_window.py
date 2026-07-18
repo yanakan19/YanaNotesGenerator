@@ -119,6 +119,7 @@ class MainWindow(QMainWindow):
 
         self._settings.theme_changed.connect(self._on_theme_changed)
         self._settings.repository_changed.connect(self._library.reload)
+        self._settings.connection_changed.connect(self._auth.reset)
         self._settings.logout.connect(self._logout)
         self._settings.toast.connect(self._toast.show_message)
 

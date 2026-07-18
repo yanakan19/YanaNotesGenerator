@@ -8,6 +8,8 @@ location, and phone access.
 
 Built entirely in Python with PySide6 (Qt).
 
+Run the tests with `pytest` from the `desktop/` folder.
+
 ---
 
 ## Features
@@ -53,13 +55,16 @@ pip install -r requirements.txt
      template includes the token, e.g. `Your code is {{ .Token }}`. Supabase
      sends a 6 digit code as `{{ .Token }}`.
 4. Copy your project URL and anon key from **Project Settings -> API**.
-5. Create your env file:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-   and fill in `SUPABASE_URL` and `SUPABASE_ANON_KEY`.
+5. Provide the connection **either** way:
+   - **In the app (easiest):** just run it. On first launch a *Connect to
+     Supabase* dialog asks for the URL and anon key and saves them to a per
+     user config file. You can edit it later in **Settings -> Connection**.
+   - **Or via a file (good for developers/bundling):**
+     ```bash
+     cp .env.example .env
+     ```
+     and fill in `SUPABASE_URL` and `SUPABASE_ANON_KEY`. A `.env` always wins
+     over the in app value.
 
 ## 4. Run
 
@@ -80,6 +85,22 @@ Click **Check again** in the app and you're in. See who is waiting with:
 ```sql
 select * from public.pending_licenses;
 ```
+
+## 4b. (Optional) Get emailed on new licence requests
+
+So you don't have to poll `pending_licenses`, an edge function can email you
+the moment someone requests access:
+
+```bash
+supabase functions deploy notify-license-request
+supabase secrets set RESEND_API_KEY=... ADMIN_EMAIL=you@example.com \
+                     FROM_EMAIL="YanaNotes <notify@yourdomain>"
+```
+
+Then add the trigger: **Database -> Webhooks -> Create hook** on
+`public.licenses` INSERT pointing at `notify-license-request` (details and a
+pure SQL alternative in `supabase/notify.sql`). Uses [Resend](https://resend.com)
+for delivery.
 
 ## 5. Point it at your notes
 
