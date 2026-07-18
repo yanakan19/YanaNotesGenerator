@@ -41,6 +41,37 @@ class AuthError(RuntimeError):
     """Any auth failure, carrying a message safe to show the user."""
 
 
+def _friendly_network_message(exc: Exception) -> str | None:
+    """Translate common low level connection failures into plain English.
+
+    Without this, a wrong or unreachable Supabase URL surfaces as a raw OS
+    error like ``[Errno 11001] getaddrinfo failed`` (Windows) or
+    ``[Errno -2] Name or service not known`` (Linux), which tells a non
+    technical user nothing actionable. Returns None for anything else so the
+    caller falls back to the raw exception text.
+    """
+    text = str(exc).lower()
+    dns_markers = (
+        "getaddrinfo failed",  # Windows DNS resolution failure
+        "name or service not known",  # Linux DNS resolution failure
+        "nodename nor servname",  # macOS DNS resolution failure
+        "temporary failure in name resolution",
+    )
+    if any(marker in text for marker in dns_markers):
+        return (
+            "Could not reach that Supabase URL. Check the project URL in "
+            "Settings -> Connection (it should look exactly like "
+            "https://your-project-ref.supabase.co) and that this device is "
+            "online."
+        )
+    if "connection refused" in text or "timed out" in text or "timeout" in text:
+        return (
+            "The connection to Supabase timed out. Check your internet "
+            "connection and try again."
+        )
+    return None
+
+
 class AuthService:
     """Thin wrapper over supabase-py, lazily created so imports stay cheap."""
 
@@ -83,7 +114,8 @@ class AuthService:
                 {"email": email, "options": {"should_create_user": True}}
             )
         except Exception as exc:  # network / rate limit / etc.
-            raise AuthError(f"Could not send the code: {exc}") from exc
+            friendly = _friendly_network_message(exc)
+            raise AuthError(friendly or f"Could not send the code: {exc}") from exc
 
     # -- step 2: verify the code, open a session --------------------------
     def verify_code(self, email: str, code: str) -> AuthSession:
@@ -95,7 +127,8 @@ class AuthService:
                 {"email": email, "token": code, "type": "email"}
             )
         except Exception as exc:
-            raise AuthError("That code was not accepted. Try again.") from exc
+            friendly = _friendly_network_message(exc)
+            raise AuthError(friendly or "That code was not accepted. Try again.") from exc
         session = getattr(res, "session", None)
         if session is None:
             raise AuthError("That code was not accepted. Try again.")

@@ -143,3 +143,68 @@ def test_theme_qss_builds_for_all_modes(qapp):
     for mode in ThemeMode:
         qss = build_qss(resolve(mode))
         assert "QPushButton" in qss and "background" in qss
+
+
+# --------------------------------------------------- connection validation
+def test_connection_dialog_rejects_dashboard_url(qapp):
+    from yananotes.ui.pages.config_dialog import ConnectionDialog
+
+    err = ConnectionDialog._validate(
+        "https://supabase.com/dashboard/project/abcxyz", "sb_publishable_" + "x" * 20
+    )
+    assert err is not None and "dashboard" in err.lower()
+
+
+def test_connection_dialog_rejects_placeholder(qapp):
+    from yananotes.ui.pages.config_dialog import ConnectionDialog
+
+    err = ConnectionDialog._validate(
+        "https://your-project-ref.supabase.co", "sb_publishable_" + "x" * 20
+    )
+    assert err is not None and "placeholder" in err.lower()
+
+
+def test_connection_dialog_rejects_secret_key(qapp):
+    from yananotes.ui.pages.config_dialog import ConnectionDialog
+
+    err = ConnectionDialog._validate(
+        "https://abcxyz.supabase.co", "sb_secret_" + "x" * 20
+    )
+    assert err is not None and "secret" in err.lower()
+
+
+def test_connection_dialog_accepts_valid_project_url(qapp):
+    from yananotes.ui.pages.config_dialog import ConnectionDialog
+
+    err = ConnectionDialog._validate(
+        "https://gxqxmmtsmmhftadiatep.supabase.co",
+        "sb_publishable_RqhzZIEdAgsdTRalgujxZg_NrvzZwMB",
+    )
+    assert err is None
+
+
+def test_connection_dialog_rejects_trailing_path(qapp):
+    from yananotes.ui.pages.config_dialog import ConnectionDialog
+
+    err = ConnectionDialog._validate(
+        "https://abcxyz.supabase.co/auth/v1", "sb_publishable_" + "x" * 20
+    )
+    assert err is not None
+
+
+# -------------------------------------------------- friendly network errors
+def test_dns_failure_gets_friendly_message():
+    from yananotes.auth.supabase_client import _friendly_network_message
+
+    windows_dns = OSError("[Errno 11001] getaddrinfo failed")
+    msg = _friendly_network_message(windows_dns)
+    assert msg is not None and "Settings" in msg and "online" in msg
+
+    linux_dns = OSError("[Errno -2] Name or service not known")
+    assert _friendly_network_message(linux_dns) is not None
+
+
+def test_unrelated_errors_have_no_friendly_override():
+    from yananotes.auth.supabase_client import _friendly_network_message
+
+    assert _friendly_network_message(ValueError("token expired")) is None

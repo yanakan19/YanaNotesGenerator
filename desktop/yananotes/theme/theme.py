@@ -115,6 +115,7 @@ def build_qss(p: Palette) -> str:
     QLabel[role="h2"] {{ font-size: 19px; font-weight: 600; }}
     QLabel[role="muted"] {{ color: {p.text_muted}; font-size: 13px; }}
     QLabel[role="accent"] {{ color: {p.accent}; font-weight: 600; }}
+    QLabel[role="danger"] {{ color: {p.danger}; font-size: 13px; font-weight: 600; }}
 
     /* Cards and surfaces */
     QFrame[role="card"] {{
