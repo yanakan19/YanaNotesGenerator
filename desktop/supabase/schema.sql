@@ -45,6 +45,13 @@ create policy "create own pending licence" on public.licenses
         auth.jwt() ->> 'email' = email and status = 'pending'
     );
 
+-- Grant the signed in role table access so the Data API (PostgREST) can reach
+-- the table; RLS above still restricts WHICH rows each user sees. These grants
+-- make the app work regardless of the "Automatically expose new tables"
+-- setting chosen at project creation.
+grant usage on schema public to authenticated;
+grant select, insert on public.licenses to authenticated;
+
 -- Convenience view for the admin: who is waiting for approval.
 create or replace view public.pending_licenses as
     select email, created_at from public.licenses where status = 'pending'
