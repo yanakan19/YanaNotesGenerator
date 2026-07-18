@@ -1,0 +1,16 @@
+# Secrets and local config
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# PyInstaller / Inno output
+build/*/
+!build/yananotes.spec
+!build/installer.iss
+dist/
+*.spec.bak
+YanaNotes-Setup.exe

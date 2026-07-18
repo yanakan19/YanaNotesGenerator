@@ -1,0 +1,16 @@
+# Core UI
+PySide6>=6.6
+
+# Backend / auth
+supabase>=2.4
+python-dotenv>=1.0
+
+# Secure token storage in the OS keychain
+keyring>=24.0
+
+# Packaging (build only)
+pyinstaller>=6.3
+
+# Optional: Google Drive phone sync (uncomment once you add OAuth creds)
+# google-api-python-client>=2.0
+# google-auth-oauthlib>=1.2
